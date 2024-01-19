@@ -72,3 +72,8 @@ BasicUnrealProject/Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 BasicUnrealProject/DerivedDataCache/*
+
+# others
+BasicUnrealProject/.vsconfig
+BasicUnrealProject/BasicUnrealProject.uproject
+!BasicUnrealProject/Saved/AutoScreenshot*

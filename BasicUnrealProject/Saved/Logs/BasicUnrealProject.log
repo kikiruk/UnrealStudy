@@ -1402,3 +1402,14 @@ LogConfig: Set CVar [[r.Shadow.DetectVertexShaderLayerAtRuntime:1]]
 [2024.01.19-14.57.35:852][924]LogPlayLevel: Display: Destroying online subsystem :Context_2
 [2024.01.19-14.57.42:287][677]LogWorldSubsystemInput: UEnhancedInputDeveloperSettings::bEnableWorldSubsystem is false, the world subsystem will not be created!
 [2024.01.19-14.59.42:561][192]LogDerivedDataCache: C:/Users/kikir/AppData/Local/UnrealEngine/Common/DerivedDataCache: Maintenance finished in +00:00:29.073 and deleted 0 files with total size 0 MiB and 0 empty folders. Scanned 15535 files in 16524 folders with total size 3011 MiB.
+[2024.01.19-15.07.11:338][537]LogWindowsTextInputMethodSystem: Activated input method: 한국어(대한민국) - (Keyboard).
+[2024.01.19-15.07.11:340][537]LogWindowsTextInputMethodSystem: Activated input method: 한국어(대한민국) - 한컴 입력기 (TSF IME).
+[2024.01.19-15.07.29:582][612]LogUObjectHash: Compacting FUObjectHashTables data took   0.45ms
+[2024.01.19-15.07.29:589][612]LogPackageLocalizationCache: Processed 46 localized package path(s) for 1 prioritized culture(s) in 0.004106 seconds
+[2024.01.19-15.07.29:591][612]LogSavePackage: Moving output files for package: /Temp/Autosaves/Temp/Untitled_1_Auto1
+[2024.01.19-15.07.29:591][612]LogSavePackage: Moving '../../../../../../Users/kikir/Desktop/SBSGameUnreal/UnrealStudy/BasicUnrealProject/Saved/Untitled_1_Auto1B67AD9E148B00BDF0B6977BAA356BB3E.tmp' to '../../../../../../Users/kikir/Desktop/SBSGameUnreal/UnrealStudy/BasicUnrealProject/Saved/Autosaves/Temp/Untitled_1_Auto1.umap'
+[2024.01.19-15.07.29:593][612]LogAssetRegistry: Warning: ScanPathsSynchronous: ../../../../../../Users/kikir/Desktop/SBSGameUnreal/UnrealStudy/BasicUnrealProject/Saved/Autosaves/Temp/Untitled_1_Auto1.umap is in the /Temp path, will not scan.
+[2024.01.19-15.07.29:593][612]LogAssetRegistry: Warning: ScanPathsSynchronous: /Temp/__ExternalActors__/Autosaves/Temp/Untitled_1_Auto1 is in the /Temp path, will not scan.
+[2024.01.19-15.07.29:593][612]LogAssetRegistry: Warning: ScanPathsSynchronous: /Temp/__ExternalObjects__/Autosaves/Temp/Untitled_1_Auto1 is in the /Temp path, will not scan.
+[2024.01.19-15.07.29:593][612]LogFileHelpers: Editor autosave (incl. external actors) for '/Temp/Untitled_1' took 0.014
+[2024.01.19-15.07.29:593][612]LogFileHelpers: Editor autosave (incl. sublevels & external actors) for all levels took 0.014
