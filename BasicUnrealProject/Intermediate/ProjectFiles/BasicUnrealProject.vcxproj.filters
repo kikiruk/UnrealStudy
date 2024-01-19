@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\BasicUnrealProject.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{F31BBDD1-B3E8-3BCC-9652-680E16935819}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\BasicUnrealProject.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\BasicUnrealProjectEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\BasicUnrealProject">
+      <UniqueIdentifier>{82898F5D-49E2-3A04-AC98-9EF577E05456}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\BasicUnrealProject\BasicUnrealProject.Build.cs">
+      <Filter>Source\BasicUnrealProject</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\BasicUnrealProject\BasicUnrealProject.cpp">
+      <Filter>Source\BasicUnrealProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BasicUnrealProject\BasicUnrealProject.h">
+      <Filter>Source\BasicUnrealProject</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

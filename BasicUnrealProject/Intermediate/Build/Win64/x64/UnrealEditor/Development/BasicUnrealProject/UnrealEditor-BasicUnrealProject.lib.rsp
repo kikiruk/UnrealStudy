@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-BasicUnrealProject.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\kikir\Desktop\SBSGameUnreal\UnrealStudy\BasicUnrealProject\Intermediate\Build\Win64\x64\BasicUnrealProjectEditor\Development\Engine\SharedPCH.Engine.Cpp20.h.obj"
+"C:\Users\kikir\Desktop\SBSGameUnreal\UnrealStudy\BasicUnrealProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\BasicUnrealProject\BasicUnrealProject.cpp.obj"
+"C:\Users\kikir\Desktop\SBSGameUnreal\UnrealStudy\BasicUnrealProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\BasicUnrealProject\Default.rc2.res"
+/OUT:"C:\Users\kikir\Desktop\SBSGameUnreal\UnrealStudy\BasicUnrealProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\BasicUnrealProject\UnrealEditor-BasicUnrealProject.lib"
