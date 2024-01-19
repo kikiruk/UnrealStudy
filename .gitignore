@@ -75,5 +75,4 @@ BasicUnrealProject/DerivedDataCache/*
 
 # others
 BasicUnrealProject/.vsconfig
-BasicUnrealProject/BasicUnrealProject.uproject
 !BasicUnrealProject/Saved/AutoScreenshot*
