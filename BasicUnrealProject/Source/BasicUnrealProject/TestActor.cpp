@@ -2,6 +2,7 @@
 
 
 #include "TestActor.h"
+#include "MyStaticMeshComponent.h"
 
 // Sets default values
 ATestActor::ATestActor()
