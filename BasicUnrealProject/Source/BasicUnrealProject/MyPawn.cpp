@@ -38,5 +38,17 @@ void AMyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AMyPawn::MoveForward);
+	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AMyPawn::MoveRight);
+}
+
+void AMyPawn::MoveForward(float value)
+{
+	UE_LOG(LogTemp, Log, TEXT("Forward : %f"), value);
+}
+
+void AMyPawn::MoveRight(float value)
+{
+	UE_LOG(LogTemp, Log, TEXT("Right : %f"), value);
 }
 
