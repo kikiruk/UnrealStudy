@@ -22,6 +22,7 @@ AMyCharacter::AMyCharacter()
 	//카메라 팔 길이 400 으로 설정 하고 회전 (-35.f, 0.f, 0.f)
 	MyCameraSpringArm->TargetArmLength = 400.f;
 	MyCameraSpringArm->SetRelativeRotation(FRotator(-35.f, 0.f, 0.f));
+	MyCameraSpringArm->bUsePawnControlRotation = true;
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> SkeletalMesh(
 		TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonSparrow/Characters/Heroes/Sparrow/Meshes/Sparrow.Sparrow'"));
