@@ -55,15 +55,27 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"),this, &AMyCharacter::doMoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"),this, &AMyCharacter::doMoveRight);
+	PlayerInputComponent->BindAxis(TEXT("MouseUp"),this, &AMyCharacter::doMouseUp);
+	PlayerInputComponent->BindAxis(TEXT("MouseRight"),this, &AMyCharacter::doMouseRight);
 }
 
 void AMyCharacter::doMoveForward(float val)
 {
-	UE_LOG(LogTemp, Log, TEXT("Forward : %f"), val);
+	AddMovementInput(GetActorForwardVector(), val);
 }
 
 void AMyCharacter::doMoveRight(float val)
 {
-	UE_LOG(LogTemp, Log, TEXT("Right : %f"), val);
+	AddMovementInput(GetActorRightVector(), val);
+}
+
+void AMyCharacter::doMouseUp(float val)
+{
+	AddControllerPitchInput(val);
+}
+
+void AMyCharacter::doMouseRight(float val)
+{
+	AddControllerYawInput(val);
 }
 

@@ -37,4 +37,6 @@ public:
 	//사용자 정의 함수 
 	void doMoveForward(float val);
 	void doMoveRight(float val);
+	void doMouseUp(float val);
+	void doMouseRight(float val);
 };
