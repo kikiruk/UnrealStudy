@@ -52,5 +52,18 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"),this, &AMyCharacter::doMoveForward);
+	PlayerInputComponent->BindAxis(TEXT("MoveRight"),this, &AMyCharacter::doMoveRight);
+}
+
+void AMyCharacter::doMoveForward(float val)
+{
+	UE_LOG(LogTemp, Log, TEXT("Forward : %f"), val);
+}
+
+void AMyCharacter::doMoveRight(float val)
+{
+	UE_LOG(LogTemp, Log, TEXT("Right : %f"), val);
 }
 
