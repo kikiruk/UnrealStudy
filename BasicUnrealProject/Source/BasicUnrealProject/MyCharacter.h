@@ -12,13 +12,11 @@ class BASICUNREALPROJECT_API AMyCharacter : public ACharacter
 	GENERATED_BODY()
 
 private:
-	//UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
+	class UCameraComponent* MyCamera;
 
 	UPROPERTY(EditAnywhere)
-	float TestFloat;
-
-	UPROPERTY(EditAnywhere)
-	FVector TestVector;
+	class USpringArmComponent* MyCameraSpringArm;
 public:
 	// Sets default values for this character's properties
 	AMyCharacter();

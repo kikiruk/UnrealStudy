@@ -2,12 +2,26 @@
 
 
 #include "MyCharacter.h"
+#include "Components/CapsuleComponent.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	MyCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("MySpringArm"));
+	MyCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MyCamera"));
+
+	//Capsule <- CameraSpringArm <- Camera 이렇게 붙임
+	MyCameraSpringArm->SetupAttachment(GetCapsuleComponent());
+	MyCamera->SetupAttachment(MyCameraSpringArm);
+
+	//카메라 팔 길이 400 으로 설정 하고 회전 (-35.f, 0.f, 0.f)
+	MyCameraSpringArm->TargetArmLength = 400.f;
+	MyCameraSpringArm->SetRelativeRotation(FRotator(-35.f, 0.f, 0.f));
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> SkeletalMesh(
 		TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonSparrow/Characters/Heroes/Sparrow/Meshes/Sparrow.Sparrow'"));
