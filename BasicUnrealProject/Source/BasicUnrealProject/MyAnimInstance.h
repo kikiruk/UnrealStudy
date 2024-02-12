@@ -20,4 +20,9 @@ private:
 	float Horizontal;
 	UPROPERTY(Category = "Animation", EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true));
 	float Vertical;
+public:
+	virtual void NativeInitializeAnimation() override;
+	virtual void NativeBeginPlay() override;
+	//블루프린트의 Event Graph 와 같은 역할을 C++ 에서 수행할 수 있다고 강사님이 설명했음
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 };
