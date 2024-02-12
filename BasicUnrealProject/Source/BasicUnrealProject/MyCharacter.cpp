@@ -22,6 +22,8 @@ AMyCharacter::AMyCharacter()
 	//카메라 팔 길이 400 으로 설정 하고 회전 (-35.f, 0.f, 0.f)
 	MyCameraSpringArm->TargetArmLength = 400.f;
 	MyCameraSpringArm->SetRelativeRotation(FRotator(-35.f, 0.f, 0.f));
+
+	//SpringArm 의 회전을 Controller 의 회전값에 따라 움직이도록 설정
 	MyCameraSpringArm->bUsePawnControlRotation = true;
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> SkeletalMesh(
@@ -38,7 +40,6 @@ AMyCharacter::AMyCharacter()
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -46,13 +47,14 @@ void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//언리얼 화면에 직접 띄우는 DebugMessage
+	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Tick!"));
 }
 
 // Called to bind functionality to input
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"),this, &AMyCharacter::doMoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"),this, &AMyCharacter::doMoveRight);
