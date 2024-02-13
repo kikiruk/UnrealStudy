@@ -20,6 +20,13 @@ private:
 	float Horizontal;
 	UPROPERTY(Category = "Animation", EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true));
 	float Vertical;
+
+private:
+	UPROPERTY(VisibleAnywhere)
+	class AMyCharacter* MyCharacter;
+	UPROPERTY(VisibleAnywhere)
+	class UCharacterMovementComponent* CharacterMovement;
+
 public:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeBeginPlay() override;
