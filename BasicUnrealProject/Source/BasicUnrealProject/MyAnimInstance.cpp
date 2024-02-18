@@ -46,6 +46,12 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		// 2D 좌표계에서의 Vector 의 길이를 구함
 		//  Size는 3D 길이, 2D는 XY 좌표 기준의 길이.
 		Speed = MyCharacter->GetVelocity().Size2D(); 
+		FVector Acceleration = CharacterMovement->GetCurrentAcceleration();
+
+		UE_LOG(LogTemp, Log, TEXT("Acceleration X : %f, Y : %f, Z : %f"), Acceleration.X, Acceleration.Y, Acceleration.Z);
+
+		//캐릭터가 움직이는 상태인지를 체크하는 변수 조건 설정
+		ShouldMove = Speed > 3.f && Acceleration != FVector::Zero();
 	}
 
 
