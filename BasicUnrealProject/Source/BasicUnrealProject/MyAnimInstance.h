@@ -24,10 +24,8 @@ private:
 	bool ShouldMove; //Idle <-> Walk 애니메이션을 변경할때의 조건
 
 private:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	class AMyCharacter* MyCharacter;
-	UPROPERTY(VisibleAnywhere)
-	class UCharacterMovementComponent* CharacterMovement;
 
 public:
 	virtual void NativeInitializeAnimation() override;
