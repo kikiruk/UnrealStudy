@@ -5,6 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -23,8 +24,11 @@ AMyCharacter::AMyCharacter()
 	MyCameraSpringArm->TargetArmLength = 400.f;
 	MyCameraSpringArm->SetRelativeRotation(FRotator(-35.f, 0.f, 0.f));
 
-	//SpringArm 의 회전을 Controller 의 회전값에 따라 움직이도록 설정
-	MyCameraSpringArm->bUsePawnControlRotation = true;
+	//[회전 설정]
+	bUseControllerRotationYaw = false; // 캐릭터가 컨트롤러 회전을 따라 자동으로 회전하지 않게 설정
+	MyCameraSpringArm->bUsePawnControlRotation = true; //SpringArm 의 회전을 Controller 의 회전값에 따라 움직이도록 설정
+	MyCamera->bUsePawnControlRotation = false;// 카메라가 자체적으로 회전하도록 설정 (캐릭터의 회전을 따르지 않음)
+	
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> SkeletalMesh(
 		TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonSparrow/Characters/Heroes/Sparrow/Meshes/Sparrow.Sparrow'"));
@@ -47,8 +51,35 @@ void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//언리얼 화면에 직접 띄우는 DebugMessage
-	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Tick!"));
+	APlayerController* MyController = Cast<APlayerController>(Controller);
+	if (!MyController) {
+		return;
+	}
+
+	// 현재 액터의 Yaw 회전과 컨트롤러의 Yaw 회전을 가져옵니다.
+	// FMath::UnwindDegrees 는 -180도에서 180 도로 각도를 정규화 시켜서 0도에서 360으로 표기되는경우의수를 없앱니다.
+	float CurrentYaw = FMath::UnwindDegrees(GetActorRotation().Yaw);
+	float TargetYaw = FMath::UnwindDegrees(MyController->GetControlRotation().Yaw);
+
+	// 두 Yaw 값 사이의 차이를 계산합니다.
+	float YawDifference = FMath::Abs(FMath::FindDeltaAngleDegrees(CurrentYaw, TargetYaw));
+
+	// 람다식 정의: 여러 키 중 하나라도 눌려있는지 확인
+	auto IsAnyMovementKeyPressed = [MyController]() -> bool {
+		return MyController->IsInputKeyDown(EKeys::W) ||
+			MyController->IsInputKeyDown(EKeys::A) ||
+			MyController->IsInputKeyDown(EKeys::S) ||
+			MyController->IsInputKeyDown(EKeys::D);
+		};
+
+	// 실제로 회전이 변경되었고, 이동 키가 눌려있는 경우에만 회전 업데이트
+	if (YawDifference > KINDA_SMALL_NUMBER && IsAnyMovementKeyPressed())
+	{
+		FRotator NewRotation = GetActorRotation();
+		float NewRotationYaw = FMath::FInterpTo(CurrentYaw, TargetYaw, DeltaTime, 10.0f); //부드럽게 회전합니다.
+		NewRotation.Yaw = NewRotationYaw;
+		SetActorRotation(NewRotation);
+	}
 }
 
 // Called to bind functionality to input
