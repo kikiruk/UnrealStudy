@@ -91,6 +91,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"),this, &AMyCharacter::doMoveRight);
 	PlayerInputComponent->BindAxis(TEXT("MouseUp"),this, &AMyCharacter::doMouseUp);
 	PlayerInputComponent->BindAxis(TEXT("MouseRight"),this, &AMyCharacter::doMouseRight);
+	PlayerInputComponent->BindAxis(TEXT("MouseWheel"), this, &AMyCharacter::doChameraArmLengthSetup);
 
 	//언리얼 기본 제공 함수 Jump 를 그대로 사용함.
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
@@ -114,5 +115,15 @@ void AMyCharacter::doMouseUp(float val)
 void AMyCharacter::doMouseRight(float val)
 {
 	AddControllerYawInput(val);
+}
+
+void AMyCharacter::doChameraArmLengthSetup(float val)
+{
+	//카메라 암의 길이 설정
+	UE_LOG(LogTemp, Log, TEXT("MouseWheelInput : %f"), val);
+	float NewCameraArmLength = MyCameraSpringArm->TargetArmLength + val * 5;
+	NewCameraArmLength = FMath::Min(NewCameraArmLength, 800.f);
+	NewCameraArmLength = FMath::Max(NewCameraArmLength, 200.f);
+	MyCameraSpringArm->TargetArmLength = NewCameraArmLength;
 }
 

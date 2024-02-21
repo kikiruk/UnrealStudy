@@ -39,4 +39,5 @@ public:
 	void doMoveRight(float val);
 	void doMouseUp(float val);
 	void doMouseRight(float val);
+	void doChameraArmLengthSetup(float val);
 };

@@ -38,7 +38,7 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		FRotator Rotation = MyCharacter->GetActorRotation();
 		FVector UnRotateVector = Rotation.UnrotateVector(Velocity).GetSafeNormal(); // Vector 의 방향값을 없앰 , GetSafeNormal 함수를 이용하여 정규화함
 
-		UE_LOG(LogTemp, Log, TEXT("Velocity X : %f Y : %f Z : %f"), Rotation.UnrotateVector(Velocity).X, Rotation.UnrotateVector(Velocity).Y, Rotation.UnrotateVector(Velocity).Z);
+		//UE_LOG(LogTemp, Log, TEXT("Velocity X : %f Y : %f Z : %f"), Rotation.UnrotateVector(Velocity).X, Rotation.UnrotateVector(Velocity).Y, Rotation.UnrotateVector(Velocity).Z);
 
 		Vertical = UnRotateVector.X; // X축에서의 속력
 		Horizontal = UnRotateVector.Y; // Y축에서의 속력
