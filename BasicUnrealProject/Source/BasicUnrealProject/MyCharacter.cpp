@@ -61,9 +61,6 @@ void AMyCharacter::Tick(float DeltaTime)
 	float CurrentYaw = FMath::UnwindDegrees(GetActorRotation().Yaw);
 	float TargetYaw = FMath::UnwindDegrees(MyController->GetControlRotation().Yaw);
 
-	// 두 Yaw 값 사이의 차이를 계산합니다.
-	float YawDifference = FMath::Abs(FMath::FindDeltaAngleDegrees(CurrentYaw, TargetYaw));
-
 	// 람다식 정의: 여러 키 중 하나라도 눌려있는지 확인
 	auto IsAnyMovementKeyPressed = [MyController]() -> bool {
 		return MyController->IsInputKeyDown(EKeys::W) ||
@@ -73,12 +70,16 @@ void AMyCharacter::Tick(float DeltaTime)
 		};
 
 	// 실제로 회전이 변경되었고, 이동 키가 눌려있는 경우에만 회전 업데이트
-	if (YawDifference > KINDA_SMALL_NUMBER && IsAnyMovementKeyPressed())
+	if (CurrentYaw != TargetYaw && IsAnyMovementKeyPressed())
 	{
+		// 두 Yaw 값 사이의 차이를 계산합니다. FindDeltaAngleDegrees 값을 계산함으로써 캐릭터 회전시 반대로 회전하는 현상을 예방합니다.
+		float YawDifference = FMath::FindDeltaAngleDegrees(CurrentYaw, TargetYaw);
+
 		FRotator NewRotation = GetActorRotation();
-		float NewRotationYaw = FMath::FInterpTo(CurrentYaw, TargetYaw, DeltaTime, 10.0f); //부드럽게 회전합니다.
+		float NewRotationYaw = FMath::FInterpTo(CurrentYaw, CurrentYaw + YawDifference, DeltaTime, 10.0f); //부드럽게 회전합니다.
 		NewRotation.Yaw = NewRotationYaw;
 		SetActorRotation(NewRotation);
+		UE_LOG(LogTemp, Log, TEXT("NewYaw : %f"), NewRotation.Yaw);
 	}
 }
 
@@ -124,6 +125,6 @@ void AMyCharacter::doChameraArmLengthSetup(float val)
 	float NewCameraArmLength = MyCameraSpringArm->TargetArmLength + val * 5;
 	NewCameraArmLength = FMath::Min(NewCameraArmLength, 800.f);
 	NewCameraArmLength = FMath::Max(NewCameraArmLength, 200.f);
-	MyCameraSpringArm->TargetArmLength = NewCameraArmLength;
+	//MyCameraSpringArm->TargetArmLength = NewCameraArmLength;
 }
 

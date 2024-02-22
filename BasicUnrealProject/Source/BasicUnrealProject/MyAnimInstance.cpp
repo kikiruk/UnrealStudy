@@ -31,17 +31,14 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (IsValid(MyCharacter))
 	{
 		UCharacterMovementComponent* CharacterMovement = MyCharacter->GetCharacterMovement();
+
 		//Vector -> 방향값과 길이를 가지고 있음
 		//Velocity -> 방향값과 속도(길이) 가지고 있음 
-		FVector Velocity = CharacterMovement->Velocity; // 속력
-		//UE_LOG(LogTemp, Log, TEXT("Velocity X : %f Y : %f Z : %f"), Velocity.X, Velocity.Y, Velocity.Z);
-		FRotator Rotation = MyCharacter->GetActorRotation();
-		FVector UnRotateVector = Rotation.UnrotateVector(Velocity).GetSafeNormal(); // Vector 의 방향값을 없앰 , GetSafeNormal 함수를 이용하여 정규화함
+		float ActorYaw = MyCharacter->GetActorRotation().Yaw;
+		float CharacterYaw = MyCharacter->GetControlRotation().Yaw;
 
 		//UE_LOG(LogTemp, Log, TEXT("Velocity X : %f Y : %f Z : %f"), Rotation.UnrotateVector(Velocity).X, Rotation.UnrotateVector(Velocity).Y, Rotation.UnrotateVector(Velocity).Z);
-
-		Vertical = UnRotateVector.X; // X축에서의 속력
-		Horizontal = UnRotateVector.Y; // Y축에서의 속력
+		YawOffset = FMath::FindDeltaAngleDegrees(ActorYaw, CharacterYaw);
 
 		// 2D 좌표계에서의 Vector 의 길이를 구함
 		//  Size는 3D 길이, 2D는 XY 좌표 기준의 길이.
