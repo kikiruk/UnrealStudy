@@ -61,7 +61,7 @@ void AMyCharacter::Tick(float DeltaTime)
 	float CurrentYaw = FMath::UnwindDegrees(GetActorRotation().Yaw);
 	float TargetYaw = FMath::UnwindDegrees(MyController->GetControlRotation().Yaw);
 
-	// 람다식 정의: 여러 키 중 하나라도 눌려있는지 확인
+	// 가독성을 위한 람다식 : 여러 키 중 하나라도 눌려있는지 확인
 	auto IsAnyMovementKeyPressed = [MyController]() -> bool {
 		return MyController->IsInputKeyDown(EKeys::W) ||
 			MyController->IsInputKeyDown(EKeys::A) ||

@@ -4,6 +4,7 @@
 #include "MyAnimInstance.h"
 #include "MyCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 void UMyAnimInstance::NativeInitializeAnimation()
 {
@@ -34,11 +35,13 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		//Vector -> 방향값과 길이를 가지고 있음
 		//Velocity -> 방향값과 속도(길이) 가지고 있음 
-		float ActorYaw = MyCharacter->GetActorRotation().Yaw;
+		FVector Velocity = MyCharacter->GetVelocity();
+		FRotator ActorRotation = UKismetMathLibrary::MakeRotFromX(Velocity);
+		float ActorYaw = ActorRotation.Yaw;
 		float CharacterYaw = MyCharacter->GetControlRotation().Yaw;
 
 		//UE_LOG(LogTemp, Log, TEXT("Velocity X : %f Y : %f Z : %f"), Rotation.UnrotateVector(Velocity).X, Rotation.UnrotateVector(Velocity).Y, Rotation.UnrotateVector(Velocity).Z);
-		YawOffset = FMath::FindDeltaAngleDegrees(ActorYaw, CharacterYaw);
+		YawOffset = FMath::FindDeltaAngleDegrees(CharacterYaw, ActorYaw);
 
 		// 2D 좌표계에서의 Vector 의 길이를 구함
 		//  Size는 3D 길이, 2D는 XY 좌표 기준의 길이.
