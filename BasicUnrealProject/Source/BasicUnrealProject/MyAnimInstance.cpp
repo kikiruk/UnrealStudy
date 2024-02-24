@@ -9,7 +9,6 @@
 void UMyAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
-	UE_LOG(LogTemp, Log, TEXT("NativeInitializeAnimation"));
 }
 
 void UMyAnimInstance::NativeBeginPlay()
@@ -22,8 +21,6 @@ void UMyAnimInstance::NativeBeginPlay()
 	{
 		MyCharacter = Cast<AMyCharacter>(PawnOwenerTmp);
 	}
-
-	//UE_LOG(LogTemp, Log, TEXT("NativeBeginPlay"));
 }
 
 void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -50,7 +47,4 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		//캐릭터가 움직이는 상태인지를 체크하는 변수 조건 설정
 		ShouldMove = Speed > 3.f && Acceleration != FVector::Zero();
 	}
-
-
-	//UE_LOG(LogTemp, Log, TEXT("DeltaSeconds : %f"), DeltaSeconds);
 }

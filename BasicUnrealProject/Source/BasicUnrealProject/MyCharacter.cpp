@@ -125,6 +125,6 @@ void AMyCharacter::doChameraArmLengthSetup(float val)
 	float NewCameraArmLength = MyCameraSpringArm->TargetArmLength + val * 5;
 	NewCameraArmLength = FMath::Min(NewCameraArmLength, 800.f);
 	NewCameraArmLength = FMath::Max(NewCameraArmLength, 200.f);
-	//MyCameraSpringArm->TargetArmLength = NewCameraArmLength;
+	MyCameraSpringArm->TargetArmLength = NewCameraArmLength;
 }
 
