@@ -44,6 +44,8 @@ AMyCharacter::AMyCharacter()
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 }
 
 // Called every frame
@@ -79,8 +81,20 @@ void AMyCharacter::Tick(float DeltaTime)
 		float NewRotationYaw = FMath::FInterpTo(CurrentYaw, CurrentYaw + YawDifference, DeltaTime, 10.0f); //부드럽게 회전합니다.
 		NewRotation.Yaw = NewRotationYaw;
 		SetActorRotation(NewRotation);
-		UE_LOG(LogTemp, Log, TEXT("NewYaw : %f"), NewRotation.Yaw);
 	}
+
+
+	FVector ActorVelocity = GetMovementComponent()->Velocity; //월드 좌표계에서 character 의 Velocity
+	FVector ActorLocalVelocity = GetActorRotation().UnrotateVector(ActorVelocity); //현 시점 Camera 에서 character 의 Velocity
+
+	GetCharacterMovement()->MaxWalkSpeed = 600.f;
+
+	if (ActorLocalVelocity.X > 0 && MyController->IsInputKeyDown(EKeys::LeftShift)) //캐릭터가 전방으로 움직이고, Shift가 눌러져 있다면
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 1200.f; //캐릭터 최대속도 증가
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("%f"), ActorLocalVelocity.Length());
 }
 
 // Called to bind functionality to input
@@ -95,7 +109,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis(TEXT("MouseWheel"), this, &AMyCharacter::doChameraArmLengthSetup);
 
 	//언리얼 기본 제공 함수 Jump 를 그대로 사용함.
-	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &AMyCharacter::Jump);
 }
 
 void AMyCharacter::doMoveForward(float val)
@@ -121,10 +135,8 @@ void AMyCharacter::doMouseRight(float val)
 void AMyCharacter::doChameraArmLengthSetup(float val)
 {
 	//카메라 암의 길이 설정
-	UE_LOG(LogTemp, Log, TEXT("MouseWheelInput : %f"), val);
 	float NewCameraArmLength = MyCameraSpringArm->TargetArmLength + val * 5;
 	NewCameraArmLength = FMath::Min(NewCameraArmLength, 800.f);
 	NewCameraArmLength = FMath::Max(NewCameraArmLength, 200.f);
 	MyCameraSpringArm->TargetArmLength = NewCameraArmLength;
 }
-
