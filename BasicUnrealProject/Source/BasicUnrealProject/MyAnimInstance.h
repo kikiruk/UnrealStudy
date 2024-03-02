@@ -22,7 +22,8 @@ private:
 	float Vertical;
 	UPROPERTY(Category = "Animation", EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true));
 	bool ShouldMove; //Idle <-> Walk 애니메이션을 변경할때의 조건
-
+	UPROPERTY(Category = "Animation", EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true));
+	FRotator LookAtRotation; // 캐릭터가 바라보는 방향을 나타내는 Rotator, 블루프린트 AimOffset 에서 사용
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	class AMyCharacter* MyCharacter;
