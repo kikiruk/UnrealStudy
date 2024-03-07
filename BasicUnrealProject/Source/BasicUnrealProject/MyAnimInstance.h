@@ -13,6 +13,9 @@ UCLASS()
 class BASICUNREALPROJECT_API UMyAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
+public:
+	UMyAnimInstance();
+
 private:
 	UPROPERTY(Category = "Animation", EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true));
 	float Speed;
@@ -28,8 +31,7 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	class AMyCharacter* MyCharacter;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
-	class UAnimMontage* MyFireMontage;
+
 
 public:
 	virtual void NativeInitializeAnimation() override;

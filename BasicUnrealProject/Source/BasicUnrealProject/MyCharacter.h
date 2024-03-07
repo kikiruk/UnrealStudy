@@ -17,6 +17,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	class USpringArmComponent* MyCameraSpringArm;
+
+	UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	class UAnimMontage* MyFireMontage;
 public:
 	// Sets default values for this character's properties
 	AMyCharacter();
@@ -40,4 +43,5 @@ public:
 	void doMouseUp(float val);
 	void doMouseRight(float val);
 	void doChameraArmLengthSetup(float val);
+	void doLeftClick();
 };

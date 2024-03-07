@@ -8,7 +8,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
-AMyCharacter::AMyCharacter()
+AMyCharacter::AMyCharacter() :
+	MyCamera(nullptr), MyCameraSpringArm(nullptr), MyFireMontage(nullptr)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -37,6 +38,15 @@ AMyCharacter::AMyCharacter()
 	{
 		GetMesh()->SetSkeletalMesh(SkeletalMesh.Object);
 		GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -90.0f), FRotator(0.0f, -90.0f, 0.0f));
+	}
+
+	//Fire 몽타주 초기화 코드
+	ConstructorHelpers::FObjectFinder<UAnimMontage> FireAnimMontageConstructer(TEXT(
+		"'/Game/ParagonSparrow/Characters/Heroes/Sparrow/Animations/Primary_Fire_Med_Montage.Primary_Fire_Med_Montage'"));
+	
+	if (FireAnimMontageConstructer.Succeeded())
+	{
+		MyFireMontage = FireAnimMontageConstructer.Object;
 	}
 }
 
@@ -107,6 +117,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis(TEXT("MouseWheel"), this, &AMyCharacter::doChameraArmLengthSetup);
 
 	//언리얼 기본 제공 함수 Jump 를 그대로 사용함.
+	PlayerInputComponent->BindAction(TEXT("LeftClick"), EInputEvent::IE_Pressed, this, &AMyCharacter::doLeftClick);
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &AMyCharacter::Jump);
 }
 
@@ -137,4 +148,11 @@ void AMyCharacter::doChameraArmLengthSetup(float val)
 	NewCameraArmLength = FMath::Min(NewCameraArmLength, 800.f);
 	NewCameraArmLength = FMath::Max(NewCameraArmLength, 200.f);
 	MyCameraSpringArm->TargetArmLength = NewCameraArmLength;
+}
+
+void AMyCharacter::doLeftClick()
+{
+	UAnimInstance* MyAnimInstance = GetMesh()->GetAnimInstance();
+
+	MyAnimInstance->Montage_Play(MyFireMontage, 1.0f);
 }
