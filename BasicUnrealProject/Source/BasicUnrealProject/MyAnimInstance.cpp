@@ -46,11 +46,23 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		//캐릭터가 움직이는 상태인지를 체크하는 변수 조건 설정
 		ShouldMove = Speed > 3.f && Acceleration != FVector::Zero();
 
-		
-		FRotator ContralRotation = MyCharacter->GetControlRotation();
-		float LookAtRotationYaw = FMath::FindDeltaAngleDegrees(ContralRotation.Yaw, Rotation.Yaw); //Yaw의 각도와 Rotation(Actor 의 Rotation) 을 빼서 각도의 차이 구하기 
-		ContralRotation.Yaw = -LookAtRotationYaw; // Yaw 값이 반대로 회전하는걸 방지하기위해 - 부호 넣음 
-		ContralRotation.Normalize(); // Rotator 을 -180 에서 180 으로 정규화
-		LookAtRotation = ContralRotation; // LookAtRotation : 멤버변수 
+		//LookAtRotation 을 변경하는 코드. Roll 값은 ContrllRotation 도 변화하지 않으므로 고려하지 않음
+		{
+			FRotator ContralRotation = MyCharacter->GetControlRotation();
+
+			// Rotator 을 -180 에서 180 으로 정규화
+			ContralRotation.Normalize(); 
+			//FindDeltaAngleDegrees를 사용하는이유는 그냥 ContrallRotation 을 사용하면 Wald좌표를 가져오고 AimOffset 의 180에서 -180 도의 값에 충족하지 못하기때문이다
+			float DeltaAngleRoationYaw = FMath::FindDeltaAngleDegrees(MyCharacter->GetActorRotation().Yaw, ContralRotation.Yaw);
+
+			float TargetYaw = DeltaAngleRoationYaw; float CurrentYaw = LookAtRotation.Yaw;
+			// RInterpTo 를 사용하지 않은 이유는 -180 에서 180으로 짧은 경로로 이동하기 때문에 길게 돌아가게 구현하고싶어서이다
+			float InterpolatedYaw = FMath::FInterpTo(CurrentYaw, TargetYaw, DeltaSeconds, 6);
+
+			//UE_LOG(LogTemp, Log, TEXT("Current : %f , Target : %f"), ContralRotation.Yaw, LookAtRotation.Yaw);
+
+			LookAtRotation.Pitch = ContralRotation.Pitch;
+			LookAtRotation.Yaw = InterpolatedYaw;
+		}
 	}
 }

@@ -93,8 +93,6 @@ void AMyCharacter::Tick(float DeltaTime)
 	{
 		GetCharacterMovement()->MaxWalkSpeed = 1200.f; //캐릭터 최대속도 증가
 	}
-
-	UE_LOG(LogTemp, Log, TEXT("%f"), ActorLocalVelocity.Length());
 }
 
 // Called to bind functionality to input
