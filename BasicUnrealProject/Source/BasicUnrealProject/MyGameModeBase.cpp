@@ -6,11 +6,7 @@
 
 AMyGameModeBase::AMyGameModeBase()
 {
-	ConstructorHelpers::FClassFinder<AMyCharacter> BP_MyCharacter(
-		TEXT("/Script/Engine.Blueprint'/Game/MyBlueprint/BP_MyChracter.BP_MyChracter_C'"));
-	
-	if (BP_MyCharacter.Succeeded())
-	{
-		DefaultPawnClass = BP_MyCharacter.Class;
-	}
+	//블루프린트에서 Default Pawn Class 를 설정하지않고 C++ 에서 직접 배정하기
+	//하지만 지금 GameMode 는 AMyGameModeBase 를 상속받는 블루프린트로 하기 때문에 필요없음 
+	//DefaultPawnClass = AMyCharacter::StaticClass();
 }

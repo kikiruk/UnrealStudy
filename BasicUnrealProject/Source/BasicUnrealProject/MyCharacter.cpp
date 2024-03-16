@@ -48,6 +48,15 @@ AMyCharacter::AMyCharacter() :
 	{
 		MyFireMontage = FireAnimMontageConstructer.Object;
 	}
+
+	//블루프린트에서 할당해주던 Chracter 의 AnimClass를 C++ 코드로 할당
+	ConstructorHelpers::FClassFinder<UAnimInstance> AnimClass(TEXT("/Script/Engine.AnimBlueprint'/Game/MyBlueprint/Animation/MyAnimBP.MyAnimBP_C'"));
+	if (AnimClass.Succeeded())
+	{
+		UE_LOG(LogTemp, Log, TEXT("AnimClassSucceeded"));
+		GetMesh()->SetAnimClass(AnimClass.Class);
+	}
+
 }
 
 // Called when the game starts or when spawned
@@ -57,6 +66,11 @@ void AMyCharacter::BeginPlay()
 
 	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 }
+
+void AMyCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+}	
 
 // Called every frame
 void AMyCharacter::Tick(float DeltaTime)
