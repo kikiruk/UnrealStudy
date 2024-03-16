@@ -16,4 +16,6 @@ class BASICUNREALPROJECT_API AMyGameModeBase : public AGameModeBase
 	
 public:
 	AMyGameModeBase();
+
+	//FollowAcademyClasses 에 대한 첫 push 테스트용 주석 (바로 삭제할것임)
 };
