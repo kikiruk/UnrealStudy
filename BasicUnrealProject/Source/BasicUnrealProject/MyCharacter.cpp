@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "MyCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Blueprint/UserWidget.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -57,12 +57,33 @@ AMyCharacter::AMyCharacter() :
 		GetMesh()->SetAnimClass(AnimClass.Class);
 	}
 
+	//위젯블루프린트를 객체화하여서 화면에 붙이는건 생성자에서 부적합하다고 판단되어서 BeginPlay로 넘겨주기위해 멤버변수로 저장함
+	ConstructorHelpers::FClassFinder<UUserWidget> MyPlayerScreenConstruct(TEXT("WidgetBlueprint'/Game/MyBlueprint/WBP_PlayerScreen.WBP_PlayerScreen_C'"));
+	if (MyPlayerScreenConstruct.Succeeded())
+	{
+		MyPlayerScreen = MyPlayerScreenConstruct.Class;
+	}
 }
 
 // Called when the game starts or when spawned
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//MyPlayerScreen 은 TSubclassOf<UUserWidget> 이며, 위젯블루프린트 클래스이고 이걸 객체화하여 화면에 붙이는 과정이다
+	if (IsValid(MyPlayerScreen))
+	{
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		if (IsValid(PC))
+		{
+			MyPlayerScreenInstance = CreateWidget<UUserWidget>(PC, MyPlayerScreen);
+		}
+
+		if (IsValid(MyPlayerScreenInstance))
+		{
+			MyPlayerScreenInstance->AddToViewport();
+		}
+	}
 
 	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 }
