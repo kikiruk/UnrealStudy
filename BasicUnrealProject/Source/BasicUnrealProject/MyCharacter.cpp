@@ -23,12 +23,16 @@ AMyCharacter::AMyCharacter() :
 
 	//카메라 팔 길이 400 으로 설정 하고 회전 (-35.f, 0.f, 0.f)
 	MyCameraSpringArm->TargetArmLength = 400.f;
+
+	//SocketOffset 속성을 이용하여 부착된 컴포넌트의 기본 위치를 미세 조정한다
+	//Aim이 화면에 나오는 것을 캐릭터 오른쪽 어깨 위로 올리기위함이다. 학원수업내용을 따라기기위해 했지만 좋은 방법은 확실히 아니다.
+	MyCameraSpringArm->SocketOffset = FVector(0.f, 120.f, 75.f); 
 	MyCameraSpringArm->SetRelativeRotation(FRotator(-35.f, 0.f, 0.f));
 
 	//[회전 설정]
 	bUseControllerRotationYaw = false; // 캐릭터가 컨트롤러 회전을 따라 자동으로 회전하지 않게 설정
 	MyCameraSpringArm->bUsePawnControlRotation = true; //SpringArm 의 회전을 Controller 의 회전값에 따라 움직이도록 설정
-	MyCamera->bUsePawnControlRotation = false;// 카메라가 자체적으로 회전하도록 설정 (캐릭터의 회전을 따르지 않음)
+	MyCamera->bUsePawnControlRotation = false; // 카메라가 자체적으로 회전하도록 설정 (캐릭터의 회전을 따르지 않음)
 	
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> SkeletalMesh(
@@ -56,13 +60,6 @@ AMyCharacter::AMyCharacter() :
 		UE_LOG(LogTemp, Log, TEXT("AnimClassSucceeded"));
 		GetMesh()->SetAnimClass(AnimClass.Class);
 	}
-
-	//위젯블루프린트를 객체화하여서 화면에 붙이는건 생성자에서 부적합하다고 판단되어서 BeginPlay로 넘겨주기위해 멤버변수로 저장함
-	ConstructorHelpers::FClassFinder<UUserWidget> MyPlayerScreenConstruct(TEXT("WidgetBlueprint'/Game/MyBlueprint/WBP_PlayerScreen.WBP_PlayerScreen_C'"));
-	if (MyPlayerScreenConstruct.Succeeded())
-	{
-		MyPlayerScreen = MyPlayerScreenConstruct.Class;
-	}
 }
 
 // Called when the game starts or when spawned
@@ -70,13 +67,19 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	TSubclassOf<UUserWidget> MyPlayerScreenClass = LoadClass<UUserWidget>(nullptr, TEXT("WidgetBlueprint'/Game/MyBlueprint/WBP_PlayerScreen.WBP_PlayerScreen_C'"));
+
 	//MyPlayerScreen 은 TSubclassOf<UUserWidget> 이며, 위젯블루프린트 클래스이고 이걸 객체화하여 화면에 붙이는 과정이다
-	if (IsValid(MyPlayerScreen))
+	if (IsValid(MyPlayerScreenClass))
 	{
+		/*MyChracter 의 GetController 가 PlayerController 인지확인해주면서
+		추후 PlayerController 뿐만아니라 다른용도의 재사용성도 고려하면서, 
+		 안정성을 부여함 
+		*/
 		APlayerController* PC = Cast<APlayerController>(GetController());
 		if (IsValid(PC))
 		{
-			MyPlayerScreenInstance = CreateWidget<UUserWidget>(PC, MyPlayerScreen);
+			MyPlayerScreenInstance = CreateWidget<UUserWidget>(PC, MyPlayerScreenClass);
 		}
 
 		if (IsValid(MyPlayerScreenInstance))

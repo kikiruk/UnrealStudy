@@ -21,11 +21,6 @@ private:
 	UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	class UAnimMontage* MyFireMontage;
 
-	//위젯블루프린트 클래스 : 생성자에서 ConstructerHelpers 로 할당되었으며, 
-	//객체는 BeginPlay에서 만들어줘야해서 정보를 넘겨주기위해서 지역변수로 함
-	UPROPERTY(Category = "UI", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
-	TSubclassOf<class UUserWidget> MyPlayerScreen;
-
 	//위젯블루프린트 클래스의 객체 (인스턴스) 
 	UPROPERTY(Category = "UI", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	UUserWidget* MyPlayerScreenInstance;
