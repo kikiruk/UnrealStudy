@@ -10,8 +10,14 @@ AArrow::AArrow()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ArrowMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh> 
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> arrowMeshTemp(
+		TEXT("/Script/Engine.StaticMesh'/Game/ParagonSparrow/FX/Meshes/Heroes/Sparrow/Abilities/SM_Sparrow_Arrow.SM_Sparrow_Arrow'"));
 
+	if (arrowMeshTemp.Succeeded())
+	{
+		ArrowMesh->SetStaticMesh(arrowMeshTemp.Object);
+		ArrowMesh->SetRelativeLocationAndRotation(FVector(100.f, 0.f, 0.f), FRotator(90.f, 0.f, 0.f));
+	}
 }
 
 // Called when the game starts or when spawned

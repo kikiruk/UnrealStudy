@@ -10,7 +10,6 @@ UCLASS()
 class BASICUNREALPROJECT_API AArrow : public AActor
 {
 	GENERATED_BODY()
-
 protected:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* ArrowMesh;
