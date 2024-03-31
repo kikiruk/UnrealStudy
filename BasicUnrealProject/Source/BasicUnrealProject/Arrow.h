@@ -11,11 +11,19 @@ class BASICUNREALPROJECT_API AArrow : public AActor
 {
 	GENERATED_BODY()
 protected:
+
+
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* DefaultComponent;
+
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* ArrowMesh;
 
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* CollisionMesh;
+
+	UPROPERTY(VisibleAnywhere)
+	class UProjectileMovementComponent* ProjectileMovementComponent;
 public:	
 	// Sets default values for this actor's properties
 	AArrow();
