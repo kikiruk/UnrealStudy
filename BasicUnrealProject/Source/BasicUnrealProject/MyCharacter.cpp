@@ -6,6 +6,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Arrow.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter() :
@@ -191,6 +192,7 @@ void AMyCharacter::doChameraArmLengthSetup(float val)
 void AMyCharacter::doLeftClick()
 {
 	UAnimInstance* MyAnimInstance = GetMesh()->GetAnimInstance();
-
 	MyAnimInstance->Montage_Play(MyFireMontage, 1.0f);
+
+	GetWorld()->SpawnActor<AArrow>(FVector::ZeroVector, FRotator::ZeroRotator);
 }

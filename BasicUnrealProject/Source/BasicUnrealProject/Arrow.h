@@ -13,6 +13,9 @@ class BASICUNREALPROJECT_API AArrow : public AActor
 protected:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* ArrowMesh;
+
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* CollisionMesh;
 public:	
 	// Sets default values for this actor's properties
 	AArrow();
