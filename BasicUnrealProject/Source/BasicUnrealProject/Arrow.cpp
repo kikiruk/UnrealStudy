@@ -17,6 +17,7 @@ AArrow::AArrow()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> arrowMeshTemp(
 		TEXT("/Script/Engine.StaticMesh'/Game/ParagonSparrow/FX/Meshes/Heroes/Sparrow/Abilities/SM_Sparrow_Arrow.SM_Sparrow_Arrow'"));
 
+	//StaticMesh (화살) 위치 및 회전 , 충돌체널 설정하기
 	if (arrowMeshTemp.Succeeded())
 	{
 		ArrowMesh->SetStaticMesh(arrowMeshTemp.Object);
@@ -24,6 +25,7 @@ AArrow::AArrow()
 		ArrowMesh->SetCollisionProfileName(FName("NoCollision"));
 	}
 
+	//충돌 Box 위치 및 Scale 값 조정 , 부모 설정 
 	CollisionMesh = CreateDefaultSubobject<UBoxComponent>(FName("CollisionMesh"));
 	CollisionMesh->SetupAttachment(ArrowMesh);
 	CollisionMesh->SetRelativeLocation(FVector(0.f, 0.f, -55.f));

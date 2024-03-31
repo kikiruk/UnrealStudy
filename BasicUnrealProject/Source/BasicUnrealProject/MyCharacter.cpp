@@ -194,5 +194,17 @@ void AMyCharacter::doLeftClick()
 	UAnimInstance* MyAnimInstance = GetMesh()->GetAnimInstance();
 	MyAnimInstance->Montage_Play(MyFireMontage, 1.0f);
 
-	GetWorld()->SpawnActor<AArrow>(FVector::ZeroVector, FRotator::ZeroRotator);
+	//스켈레탈 메쉬의 arrow_anchor 라는 이름을 가진 소켓을 가져온다.
+	FTransform SocketTranceform = GetMesh()->GetSocketTransform(FName("arrow_anchor"));
+	FVector SocketLocation = SocketTranceform.GetLocation();
+	FRotator SocketRotation = SocketTranceform.GetRotation().Rotator();
+
+	/*FActorSpawnParameters 구조체는 Unreal Engine에서 액터를 스폰(생성)할 때 사용되는 매개변수 집합을 정의
+	* Owner 을 설정해줌으로써 화살이 누구에 의해 발사되었는지를 알 수 있습니다. 
+	* 이를 통해 화살에 의한 피해를 계산하거나 게임 로직을 결정할 때 소유자를 기반으로 특별한 규칙을 적용할 수 있습니다.
+	*/
+	FActorSpawnParameters params;
+	params.Owner = this;
+
+	GetWorld()->SpawnActor<AArrow>(SocketLocation, SocketRotation, params);
 }
