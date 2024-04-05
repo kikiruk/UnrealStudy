@@ -10,9 +10,9 @@
 
 // Sets default values
 AMyCharacter::AMyCharacter() :
-	MyCamera(nullptr), MyCameraSpringArm(nullptr), MyFireMontage(nullptr)
+	MyCamera(nullptr), MyCameraSpringArm(nullptr), MyFireMontage(nullptr), MyPlayerScreenInstance(nullptr), CameraCharacterDeltaDegree(0.f)
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	MyCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("MySpringArm"));
@@ -27,14 +27,13 @@ AMyCharacter::AMyCharacter() :
 
 	//SocketOffset 속성을 이용하여 부착된 컴포넌트의 기본 위치를 미세 조정한다
 	//Aim이 화면에 나오는 것을 캐릭터 오른쪽 어깨 위로 올리기위함이다. 학원수업내용을 따라기기위해 했지만 좋은 방법은 확실히 아니다.
-	MyCameraSpringArm->SocketOffset = FVector(0.f, 120.f, 75.f); 
+	MyCameraSpringArm->SocketOffset = FVector(0.f, 120.f, 75.f);
 	MyCameraSpringArm->SetRelativeRotation(FRotator(-35.f, 0.f, 0.f));
 
 	//[회전 설정]
 	bUseControllerRotationYaw = false; // 캐릭터가 컨트롤러 회전을 따라 자동으로 회전하지 않게 설정
 	MyCameraSpringArm->bUsePawnControlRotation = true; //SpringArm 의 회전을 Controller 의 회전값에 따라 움직이도록 설정
 	MyCamera->bUsePawnControlRotation = false; // 카메라가 자체적으로 회전하도록 설정 (캐릭터의 회전을 따르지 않음)
-	
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> SkeletalMesh(
 		TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonSparrow/Characters/Heroes/Sparrow/Meshes/Sparrow.Sparrow'"));
@@ -48,7 +47,6 @@ AMyCharacter::AMyCharacter() :
 	//Fire 몽타주 초기화 코드
 	ConstructorHelpers::FObjectFinder<UAnimMontage> FireAnimMontageConstructer(TEXT(
 		"'/Game/ParagonSparrow/Characters/Heroes/Sparrow/Animations/Primary_Fire_Med_Montage.Primary_Fire_Med_Montage'"));
-	
 	if (FireAnimMontageConstructer.Succeeded())
 	{
 		MyFireMontage = FireAnimMontageConstructer.Object;
@@ -74,8 +72,8 @@ void AMyCharacter::BeginPlay()
 	if (IsValid(MyPlayerScreenClass))
 	{
 		/*MyChracter 의 GetController 가 PlayerController 인지확인해주면서
-		추후 PlayerController 뿐만아니라 다른용도의 재사용성도 고려하면서, 
-		 안정성을 부여함 
+		추후 PlayerController 뿐만아니라 다른용도의 재사용성도 고려하면서,
+		 안정성을 부여함
 		*/
 		APlayerController* PC = Cast<APlayerController>(GetController());
 		if (IsValid(PC))
@@ -95,7 +93,7 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-}	
+}
 
 // Called every frame
 void AMyCharacter::Tick(float DeltaTime)
@@ -120,14 +118,24 @@ void AMyCharacter::Tick(float DeltaTime)
 			MyController->IsInputKeyDown(EKeys::D);
 		};
 
-	// 실제로 회전이 변경되었고, 이동 키가 눌려있는 경우에만 회전 업데이트
-	if (CurrentYaw != TargetYaw && IsAnyMovementKeyPressed())
+	// 실제로 회전이 변경된 경우에 회전 업데이트 
+	if (CurrentYaw != TargetYaw)
 	{
-		// 두 Yaw 값 사이의 차이를 계산합니다. FindDeltaAngleDegrees 값을 계산함으로써 캐릭터 회전시 반대로 회전하는 현상을 예방합니다.
-		float YawDifference = FMath::FindDeltaAngleDegrees(CurrentYaw, TargetYaw);
+		// 멤버변수 : 두 Yaw 값 사이의 차이를 계산합니다. FindDeltaAngleDegrees 값을 계산함으로써 캐릭터 회전시 반대로 회전하는 현상을 예방합니다.
+		CameraCharacterDeltaDegree = FMath::FindDeltaAngleDegrees(CurrentYaw, TargetYaw);
 
+		//목적 회전 Rotation 초기화
 		FRotator NewRotation = GetActorRotation();
-		float NewRotationYaw = FMath::FInterpTo(CurrentYaw, CurrentYaw + YawDifference, DeltaTime, 10.0f); //부드럽게 회전합니다.
+		float NewRotationYaw = GetActorRotation().Yaw;
+
+		bool isChracterFalling = GetMovementComponent()->IsFalling();
+
+		//이동 키가 눌려있는 경우이거나 떨어지는 중이 아닐때 캐릭터 전체 회전
+		if (IsAnyMovementKeyPressed() && !isChracterFalling)
+		{
+			NewRotationYaw = FMath::FInterpTo(CurrentYaw, CurrentYaw + CameraCharacterDeltaDegree, DeltaTime, 10.0f); //부드럽게 회전합니다.
+		}
+
 		NewRotation.Yaw = NewRotationYaw;
 		SetActorRotation(NewRotation);
 	}
@@ -149,10 +157,10 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"),this, &AMyCharacter::doMoveForward);
-	PlayerInputComponent->BindAxis(TEXT("MoveRight"),this, &AMyCharacter::doMoveRight);
-	PlayerInputComponent->BindAxis(TEXT("MouseUp"),this, &AMyCharacter::doMouseUp);
-	PlayerInputComponent->BindAxis(TEXT("MouseRight"),this, &AMyCharacter::doMouseRight);
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AMyCharacter::doMoveForward);
+	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AMyCharacter::doMoveRight);
+	PlayerInputComponent->BindAxis(TEXT("MouseUp"), this, &AMyCharacter::doMouseUp);
+	PlayerInputComponent->BindAxis(TEXT("MouseRight"), this, &AMyCharacter::doMouseRight);
 	PlayerInputComponent->BindAxis(TEXT("MouseWheel"), this, &AMyCharacter::doChameraArmLengthSetup);
 
 	//언리얼 기본 제공 함수 Jump 를 그대로 사용함.
@@ -200,7 +208,7 @@ void AMyCharacter::doLeftClick()
 	FRotator SocketRotation = SocketTranceform.GetRotation().Rotator();
 
 	/*FActorSpawnParameters 구조체는 Unreal Engine에서 액터를 스폰(생성)할 때 사용되는 매개변수 집합을 정의
-	* Owner 을 설정해줌으로써 화살이 누구에 의해 발사되었는지를 알 수 있습니다. 
+	* Owner 을 설정해줌으로써 화살이 누구에 의해 발사되었는지를 알 수 있습니다.
 	* 이를 통해 화살에 의한 피해를 계산하거나 게임 로직을 결정할 때 소유자를 기반으로 특별한 규칙을 적용할 수 있습니다.
 	*/
 	FActorSpawnParameters params;

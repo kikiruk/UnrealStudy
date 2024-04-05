@@ -50,7 +50,7 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		//캐릭터가 움직이는 상태인지를 체크하는 변수 조건 설정
 		ShouldMove = Speed > 3.f && Acceleration != FVector::Zero();
 
-		//LookAtRotation 을 변경하는 코드. Roll 값은 ContrllRotation 도 변화하지 않으므로 고려하지 않음
+		//LookAtRotation 을 변경하는 코드. ContrllRotation 의 Roll 값은 변화하지 않으므로 고려하지 않음
 		{
 			FRotator ContralRotation = MyCharacter->GetControlRotation();
 

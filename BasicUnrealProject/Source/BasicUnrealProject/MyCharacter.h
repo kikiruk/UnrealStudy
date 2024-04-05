@@ -11,6 +11,36 @@ class BASICUNREALPROJECT_API AMyCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float CameraCharacterDeltaDegree;
+
+public:
+	// Sets default values for this character's properties
+	AMyCharacter();
+
+public:
+	//사용자 정의 함수 
+	void doMoveForward(float val);
+	void doMoveRight(float val);
+	void doMouseUp(float val);
+	void doMouseRight(float val);
+	void doChameraArmLengthSetup(float val);
+	void doLeftClick();
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	virtual void PostInitializeComponents() override;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* MyCamera;
@@ -25,29 +55,4 @@ private:
 	UPROPERTY(Category = "UI", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	UUserWidget* MyPlayerScreenInstance;
 
-public:
-	// Sets default values for this character's properties
-	AMyCharacter();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	virtual void PostInitializeComponents() override;
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	
-public:
-	//사용자 정의 함수 
-	void doMoveForward(float val);
-	void doMoveRight(float val);
-	void doMouseUp(float val);
-	void doMouseRight(float val);
-	void doChameraArmLengthSetup(float val);
-	void doLeftClick();
 };
