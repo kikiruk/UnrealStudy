@@ -6,10 +6,17 @@
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnArrowFiredDelegate);
+
 UCLASS()
 class BASICUNREALPROJECT_API AMyCharacter : public ACharacter
 {
 	GENERATED_BODY()
+
+public:    
+	// 이벤트 델리게이트 선언
+	UPROPERTY(BlueprintAssignable, Category = "Animation")
+	FOnArrowFiredDelegate OnArrowFired;
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -18,9 +25,8 @@ public:
 public:
 	// Sets default values for this character's properties
 	AMyCharacter();
-
-public:
-	//사용자 정의 함수 
+private:
+	//사용자 정의 함수
 	void doMoveForward(float val);
 	void doMoveRight(float val);
 	void doMouseUp(float val);
@@ -47,9 +53,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	class USpringArmComponent* MyCameraSpringArm;
-
-	UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
-	class UAnimMontage* MyFireMontage;
 
 	//위젯블루프린트 클래스의 객체 (인스턴스) 
 	UPROPERTY(Category = "UI", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))

@@ -8,7 +8,15 @@
 
 UMyAnimInstance::UMyAnimInstance() 
 	: Speed(0.0f), Horizontal(0.0f), Vertical(0.0f), ShouldMove(false), MyCharacter(nullptr)
-{}
+{
+	//Fire 몽타주 초기화 코드
+	ConstructorHelpers::FObjectFinder<UAnimMontage> FireAnimMontageConstructer(TEXT(
+		"'/Game/ParagonSparrow/Characters/Heroes/Sparrow/Animations/Primary_Fire_Med_Montage.Primary_Fire_Med_Montage'"));
+	if (FireAnimMontageConstructer.Succeeded())
+	{
+		MyFireMontage = FireAnimMontageConstructer.Object;
+	}
+}
 
 void UMyAnimInstance::NativeInitializeAnimation()
 {
@@ -19,11 +27,12 @@ void UMyAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
 
-	APawn* PawnOwenerTmp = TryGetPawnOwner();
-
-	if (IsValid(PawnOwenerTmp))
+	// 캐릭터 인스턴스를 가져옴
+	MyCharacter = Cast<AMyCharacter>(TryGetPawnOwner());
+	if (MyCharacter)
 	{
-		MyCharacter = Cast<AMyCharacter>(PawnOwenerTmp);
+		// 캐릭터의 이벤트에 바인딩
+		MyCharacter->OnArrowFired.AddDynamic(this, &UMyAnimInstance::FireMontagePlay_BindToCharacterEvents);
 	}
 }
 
@@ -69,4 +78,9 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			LookAtRotation.Yaw = InterpolatedYaw;
 		}
 	}
+}
+
+void UMyAnimInstance::FireMontagePlay_BindToCharacterEvents()
+{
+	Montage_Play(MyFireMontage);
 }

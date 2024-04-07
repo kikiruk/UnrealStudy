@@ -22,7 +22,7 @@ AArrow::AArrow()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> arrowMeshTemp(
 		TEXT("/Script/Engine.StaticMesh'/Game/ParagonSparrow/FX/Meshes/Heroes/Sparrow/Abilities/SM_Sparrow_Arrow.SM_Sparrow_Arrow'"));
 
-	//StaticMesh (화살) 위치 및 회전 , 충돌체널 설정하기
+	//StaticMesh (화살) 위치 및 회전 , 충돌채널 설정하기
 	if (arrowMeshTemp.Succeeded())
 	{
 		ArrowMesh->SetStaticMesh(arrowMeshTemp.Object);

@@ -10,7 +10,7 @@
 
 // Sets default values
 AMyCharacter::AMyCharacter() :
-	MyCamera(nullptr), MyCameraSpringArm(nullptr), MyFireMontage(nullptr), MyPlayerScreenInstance(nullptr), CameraCharacterDeltaDegree(0.f)
+	MyCamera(nullptr), MyCameraSpringArm(nullptr), MyPlayerScreenInstance(nullptr), CameraCharacterDeltaDegree(0.f)
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -42,14 +42,6 @@ AMyCharacter::AMyCharacter() :
 	{
 		GetMesh()->SetSkeletalMesh(SkeletalMesh.Object);
 		GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -90.0f), FRotator(0.0f, -90.0f, 0.0f));
-	}
-
-	//Fire 몽타주 초기화 코드
-	ConstructorHelpers::FObjectFinder<UAnimMontage> FireAnimMontageConstructer(TEXT(
-		"'/Game/ParagonSparrow/Characters/Heroes/Sparrow/Animations/Primary_Fire_Med_Montage.Primary_Fire_Med_Montage'"));
-	if (FireAnimMontageConstructer.Succeeded())
-	{
-		MyFireMontage = FireAnimMontageConstructer.Object;
 	}
 
 	//블루프린트에서 할당해주던 Chracter 의 AnimClass를 C++ 코드로 할당
@@ -121,7 +113,9 @@ void AMyCharacter::Tick(float DeltaTime)
 	// 실제로 회전이 변경된 경우에 회전 업데이트 
 	if (CurrentYaw != TargetYaw)
 	{
-		// 멤버변수 : 두 Yaw 값 사이의 차이를 계산합니다. FindDeltaAngleDegrees 값을 계산함으로써 캐릭터 회전시 반대로 회전하는 현상을 예방합니다.
+		/*멤버변수 CameraCharacterDeltaDegree :
+		* 두 Yaw 값 사이의 차이를 계산합니다. FindDeltaAngleDegrees 값을 계산함으로써 캐릭터 회전시 반대로 회전하는 현상을 예방합니다.
+		*/ 
 		CameraCharacterDeltaDegree = FMath::FindDeltaAngleDegrees(CurrentYaw, TargetYaw);
 
 		//목적 회전 Rotation 초기화
@@ -130,7 +124,7 @@ void AMyCharacter::Tick(float DeltaTime)
 
 		bool isChracterFalling = GetMovementComponent()->IsFalling();
 
-		//이동 키가 눌려있는 경우이거나 떨어지는 중이 아닐때 캐릭터 전체 회전
+		//이동 키가 눌려있는 경우이거나 떨어지는 중이 아닐때 캐릭터 전체 회전 (아닐시 상체만 회전)
 		if (IsAnyMovementKeyPressed() && !isChracterFalling)
 		{
 			NewRotationYaw = FMath::FInterpTo(CurrentYaw, CurrentYaw + CameraCharacterDeltaDegree, DeltaTime, 10.0f); //부드럽게 회전합니다.
@@ -139,7 +133,6 @@ void AMyCharacter::Tick(float DeltaTime)
 		NewRotation.Yaw = NewRotationYaw;
 		SetActorRotation(NewRotation);
 	}
-
 
 	FVector ActorVelocity = GetMovementComponent()->Velocity; //월드 좌표계에서 character 의 Velocity
 	FVector ActorLocalVelocity = GetActorRotation().UnrotateVector(ActorVelocity); //현 시점 Camera 에서 character 의 Velocity
@@ -200,7 +193,6 @@ void AMyCharacter::doChameraArmLengthSetup(float val)
 void AMyCharacter::doLeftClick()
 {
 	UAnimInstance* MyAnimInstance = GetMesh()->GetAnimInstance();
-	MyAnimInstance->Montage_Play(MyFireMontage, 1.0f);
 
 	//스켈레탈 메쉬의 arrow_anchor 라는 이름을 가진 소켓을 가져온다.
 	FTransform SocketTranceform = GetMesh()->GetSocketTransform(FName("arrow_anchor"));
@@ -215,4 +207,7 @@ void AMyCharacter::doLeftClick()
 	params.Owner = this;
 
 	GetWorld()->SpawnActor<AArrow>(SocketLocation, SocketRotation, params);
+
+	// 이벤트 델리게이트 호출
+	OnArrowFired.Broadcast();
 }
