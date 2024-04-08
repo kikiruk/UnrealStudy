@@ -29,6 +29,7 @@ private:
 	FRotator LookAtRotation; // 캐릭터가 바라보는 방향을 나타내는 Rotator, 블루프린트 AimOffset 에서 사용
 	UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	class UAnimMontage* MyFireMontage;
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	class AMyCharacter* MyCharacter;
@@ -38,10 +39,10 @@ private:
 public:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeBeginPlay() override;
-	//블루프린트의 Event Graph 와 같은 역할을 C++ 에서 수행할 수 있다고 강사님이 설명했음
+	//블루프린트의 Event Graph 와 같은 역할을 C++ 에서 수행할 수 있다고 곽상휘가 설명했음
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-public:
+private:
 	// 캐릭터의 이벤트 바인딩을 위한 함수
 	UFUNCTION(BlueprintCallable)
 	void FireMontagePlay_BindToCharacterEvents();

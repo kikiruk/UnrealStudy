@@ -16,6 +16,7 @@ UMyAnimInstance::UMyAnimInstance()
 	{
 		MyFireMontage = FireAnimMontageConstructer.Object;
 	}
+
 }
 
 void UMyAnimInstance::NativeInitializeAnimation()
@@ -65,7 +66,7 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 			// Rotator 을 -180 에서 180 으로 정규화
 			ContralRotation.Normalize(); 
-			//FindDeltaAngleDegrees를 사용하는이유는 그냥 ContrallRotation 을 사용하면 Wald좌표를 가져오고 AimOffset 의 180에서 -180 도의 값에 충족하지 못하기때문이다
+			//FindDeltaAngleDegrees를 사용하는이유는 ContrallRotation 을 사용하면 Wald좌표를 가져오고 AimOffset 의 180에서 -180 도의 값에 충족하지 못하기때문이다
 			float DeltaAngleRoationYaw = FMath::FindDeltaAngleDegrees(MyCharacter->GetActorRotation().Yaw, ContralRotation.Yaw);
 
 			float TargetYaw = DeltaAngleRoationYaw; float CurrentYaw = LookAtRotation.Yaw;
@@ -84,3 +85,4 @@ void UMyAnimInstance::FireMontagePlay_BindToCharacterEvents()
 {
 	Montage_Play(MyFireMontage);
 }
+

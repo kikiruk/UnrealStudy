@@ -10,7 +10,7 @@
 
 // Sets default values
 AMyCharacter::AMyCharacter() :
-	MyCamera(nullptr), MyCameraSpringArm(nullptr), MyPlayerScreenInstance(nullptr), CameraCharacterDeltaDegree(0.f)
+	MyCamera(nullptr), MyCameraSpringArm(nullptr), MyPlayerScreenInstance(nullptr), bMustRotateForTick(false)
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -110,28 +110,44 @@ void AMyCharacter::Tick(float DeltaTime)
 			MyController->IsInputKeyDown(EKeys::D);
 		};
 
+	//목적 회전 Rotation 초기화
+	FRotator PurposeRotation = GetActorRotation();
+	float PurposeRotationYaw = GetActorRotation().Yaw;
+
 	// 실제로 회전이 변경된 경우에 회전 업데이트 
-	if (CurrentYaw != TargetYaw)
+	if (!FMath::IsNearlyEqual(CurrentYaw, TargetYaw, 5.f)) // 5도 이하의 차이는 같은 값으로 간주함
 	{
-		/*멤버변수 CameraCharacterDeltaDegree :
-		* 두 Yaw 값 사이의 차이를 계산합니다. FindDeltaAngleDegrees 값을 계산함으로써 캐릭터 회전시 반대로 회전하는 현상을 예방합니다.
-		*/ 
-		CameraCharacterDeltaDegree = FMath::FindDeltaAngleDegrees(CurrentYaw, TargetYaw);
-
-		//목적 회전 Rotation 초기화
-		FRotator NewRotation = GetActorRotation();
-		float NewRotationYaw = GetActorRotation().Yaw;
-
+		//FindDeltaAngleDegrees 함수를 사용함으로써 캐릭터 회전시 반대로 회전하는 현상을 예방합니다.
+		float CameraCharacterDeltaDegree = FMath::FindDeltaAngleDegrees(CurrentYaw, TargetYaw);
 		bool isChracterFalling = GetMovementComponent()->IsFalling();
 
-		//이동 키가 눌려있는 경우이거나 떨어지는 중이 아닐때 캐릭터 전체 회전 (아닐시 상체만 회전)
-		if (IsAnyMovementKeyPressed() && !isChracterFalling)
+		if (!isChracterFalling) //공중에 떠 있는 중이 아닐때 
 		{
-			NewRotationYaw = FMath::FInterpTo(CurrentYaw, CurrentYaw + CameraCharacterDeltaDegree, DeltaTime, 10.0f); //부드럽게 회전합니다.
+			if (IsAnyMovementKeyPressed()) //이동 키가 눌려있는 경우 캐릭터 전체 회전 (아닐시 상체만 회전)
+			{
+				PurposeRotationYaw = FMath::FInterpTo(CurrentYaw, CurrentYaw + CameraCharacterDeltaDegree, DeltaTime, 10.0f); //부드럽게 회전합니다.
+			}
+			// 차이가 130도 이상일경우 그 차이가 없어질때까지 회전함 그 회전해야하는지여부를 bMustRotateForTick(지역변수) 로저장함
+			else if (FMath::Abs(CameraCharacterDeltaDegree) >= 130.f) 
+			{
+				bMustRotateForTick = true;
+			}
+
+			if (bMustRotateForTick == true)
+			{
+				PurposeRotationYaw = FMath::FInterpTo(CurrentYaw, CurrentYaw + CameraCharacterDeltaDegree, DeltaTime, 3.0f); //부드럽게 회전합니다.
+			}
 		}
 
-		NewRotation.Yaw = NewRotationYaw;
-		SetActorRotation(NewRotation);
+		PurposeRotation.Yaw = PurposeRotationYaw;
+		SetActorRotation(PurposeRotation);
+	}
+	else if(bMustRotateForTick == true)
+	{
+		//최대 5도 까지 차이 날수 있으므로 Yaw 값을 Target Yaw 와 맟춰줌
+		bMustRotateForTick = false;
+		PurposeRotation.Yaw = TargetYaw;
+		SetActorRotation(PurposeRotation);
 	}
 
 	FVector ActorVelocity = GetMovementComponent()->Velocity; //월드 좌표계에서 character 의 Velocity
