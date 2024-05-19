@@ -11,6 +11,8 @@ class BASICUNREALPROJECT_API AMyEnemy : public ACharacter
 {
 	GENERATED_BODY()
 
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (ToolTip = "Skeletal mesh for the enemy character"))
 	USkeletalMeshComponent* EnemySkeletal;
 
 public:

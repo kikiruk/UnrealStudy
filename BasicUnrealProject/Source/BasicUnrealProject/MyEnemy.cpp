@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "MyEnemy.h"
+#include "MyAIController.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AMyEnemy::AMyEnemy()
@@ -9,9 +10,20 @@ AMyEnemy::AMyEnemy()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//ConstructorHelpers::FObjectFinder EnemySkeletalconstruct(TEXT());
+	// AI Controller 클래스 지정
+	AIControllerClass = AMyAIController::StaticClass();
 
-	//EnemySkeletal
+	//RootComponent = GetCapsuleComponent();
+	EnemySkeletal = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("EnemySkeletal"));
+	EnemySkeletal->SetupAttachment(RootComponent);
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> EnemySkeletalconstruct(TEXT("SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Meshes/Greystone.Greystone'"));
+	EnemySkeletal->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -90.f), FRotator(0.f, 0.f, -90.f));
+
+	if (EnemySkeletalconstruct.Succeeded())
+	{
+		EnemySkeletal->SetSkeletalMesh(EnemySkeletalconstruct.Object);
+	}
+	
 }
 
 // Called when the game starts or when spawned
