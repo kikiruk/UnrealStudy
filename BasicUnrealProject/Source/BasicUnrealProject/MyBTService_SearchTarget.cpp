@@ -58,6 +58,9 @@ void UMyBTService_SearchTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint
                 // 디버그용으로 탐지하는 범위를 시각적으로 표시합니다.
                 DrawDebugSphere(World, PawnLocation, SearchRadius, 12, FColor::Red, true, -1.0f);
 
+                // 블랙보드 키의 값을 초기화합니다. 초기화 된 상태로 유지될 경우 데코레이터에서 Is Not Set 으로 판단 됩니다 
+                BlackboardComp->ClearValue(TargetLocationKey.SelectedKeyName);
+
                 // 탐지된 객체가 있는지 확인합니다.
                 if (bIsOverlapping)
                 {
@@ -82,6 +85,10 @@ void UMyBTService_SearchTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint
                         }
                     }
                 }
+
+                //디버그용, 현재 감지된 타겟의 좌표를 출력합니다. 
+                FVector TargetLocation = BlackboardComp->GetValueAsVector(TargetLocationKey.SelectedKeyName);
+                UE_LOG(LogTemp, Log, TEXT("TargetLocationKey: %s"), *TargetLocation.ToString());
             }
             else
             {
