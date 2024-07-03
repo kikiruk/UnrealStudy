@@ -45,10 +45,9 @@ AMyCharacter::AMyCharacter() :
 	}
 
 	//블루프린트에서 할당해주던 Chracter 의 AnimClass를 C++ 코드로 할당
-	ConstructorHelpers::FClassFinder<UAnimInstance> AnimClass(TEXT("/Script/Engine.AnimBlueprint'/Game/MyBlueprint/Animation/MyAnimBP.MyAnimBP_C'"));
+	ConstructorHelpers::FClassFinder<UAnimInstance> AnimClass(TEXT("/Script/Engine.AnimBlueprint'/Game/MyBlueprint/Animation/Player/MyAnimBP.MyAnimBP_C'"));
 	if (AnimClass.Succeeded())
 	{
-		UE_LOG(LogTemp, Log, TEXT("AnimClassSucceeded"));
 		GetMesh()->SetAnimClass(AnimClass.Class);
 	}
 }

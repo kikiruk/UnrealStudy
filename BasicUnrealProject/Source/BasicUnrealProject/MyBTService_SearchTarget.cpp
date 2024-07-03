@@ -10,8 +10,11 @@ UMyBTService_SearchTarget::UMyBTService_SearchTarget()
     NodeName = "Search Target";    // 노드의 이름을 "Search Target"으로 설정합니다.
     Interval = 1.0f;               // 서비스가 실행되는 간격을 1.0초로 설정합니다.
 
-    // 블랙보드 키를 설정합니다.
-    TargetLocationKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UMyBTService_SearchTarget, TargetLocationKey));
+    // 블랙보드 키를 설정합니다. (TargetLocationKey)
+    TargetLocationKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UMyBTService_SearchTarget, TargetLocationKey)); 
+    
+    // 블랙보드 키를 설정합니다. (TargetDistance)
+    TargetDistanceKey.AddFloatFilter(this, GET_MEMBER_NAME_CHECKED(UMyBTService_SearchTarget, TargetDistanceKey));
 }
 
 // TickNode 함수: 서비스가 실행될 때마다 호출됩니다.
@@ -20,7 +23,7 @@ void UMyBTService_SearchTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint
  
     Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-    UE_LOG(LogTemp, Log, TEXT("DeltaSeconds: %f"), DeltaSeconds); // 디버그 로그에 DeltaSeconds를 출력합니다.
+    //UE_LOG(LogTemp, Log, TEXT("BT_Service DeltaSeconds: %f"), DeltaSeconds); // 디버그 로그에 DeltaSeconds를 출력합니다.
 
     AAIController* AICon = OwnerComp.GetAIOwner();  // AI 컨트롤러와 블랙보드 컴포넌트를 가져옵니다.
     UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
@@ -60,6 +63,7 @@ void UMyBTService_SearchTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 
                 // 블랙보드 키의 값을 초기화합니다. 초기화 된 상태로 유지될 경우 데코레이터에서 Is Not Set 으로 판단 됩니다 
                 BlackboardComp->ClearValue(TargetLocationKey.SelectedKeyName);
+                BlackboardComp->ClearValue(TargetDistanceKey.SelectedKeyName);
 
                 // 탐지된 객체가 있는지 확인합니다.
                 if (bIsOverlapping)
@@ -79,16 +83,20 @@ void UMyBTService_SearchTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint
                             // 디버그용으로 탐지된 객체를 시각적으로 표시합니다.
                             DrawDebugSphere(World, OverlappedActor->GetActorLocation(), 50.0f, 12, FColor::Red, false, 1.0f);
 
+                            // 블랙보드에 탐지된 객체와의 거리를 저장합니다.
+                            BlackboardComp->SetValueAsFloat(TargetDistanceKey.SelectedKeyName, FVector::Dist(OverlappedActor->GetActorLocation(), PawnLocation));
+
+                            UE_LOG(LogTemp, Log, TEXT("Distance : %f"), FVector::Dist(OverlappedActor->GetActorLocation(), PawnLocation));
                             // 디버그 로그에 탐지된 객체의 이름을 출력합니다.
-                            UE_LOG(LogTemp, Log, TEXT("Detected Actor: %s"), *OverlappedActor->GetName());
+                            //UE_LOG(LogTemp, Log, TEXT("Detected Actor: %s"), *OverlappedActor->GetName());
                             break; // 첫 번째 탐지된 객체를 사용합니다.
                         }
                     }
                 }
 
                 //디버그용, 현재 감지된 타겟의 좌표를 출력합니다. 
-                FVector TargetLocation = BlackboardComp->GetValueAsVector(TargetLocationKey.SelectedKeyName);
-                UE_LOG(LogTemp, Log, TEXT("TargetLocationKey: %s"), *TargetLocation.ToString());
+                //FVector TargetLocation = BlackboardComp->GetValueAsVector(TargetLocationKey.SelectedKeyName);
+                //UE_LOG(LogTemp, Log, TEXT("TargetLocationKey: %s"), *TargetLocation.ToString());
             }
             else
             {

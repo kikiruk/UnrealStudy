@@ -31,10 +31,9 @@ private:
 	class UAnimMontage* MyFireMontage;
 
 private:
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	class AMyCharacter* MyCharacter;
-
-
 
 public:
 	virtual void NativeInitializeAnimation() override;

@@ -6,6 +6,10 @@
 #include "GameFramework/Pawn.h"
 #include "Runtime/NavigationSystem/Public/NavigationPath.h"
 #include "Navigation/PathFollowingComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "GameFramework/Character.h"
+#include "Animation/AnimInstance.h"
+#include "EnemyAnimInstance.h"
 
 // 생성자: 노드 이름과 기본 탐색 반경 설정
 UMyBTTask_MoveTo::UMyBTTask_MoveTo()

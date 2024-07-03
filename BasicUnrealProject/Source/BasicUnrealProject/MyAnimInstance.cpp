@@ -16,7 +16,6 @@ UMyAnimInstance::UMyAnimInstance()
 	{
 		MyFireMontage = FireAnimMontageConstructer.Object;
 	}
-
 }
 
 void UMyAnimInstance::NativeInitializeAnimation()
@@ -81,6 +80,9 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UMyAnimInstance::FireMontagePlay_BindToCharacterEvents()
 {
-	Montage_Play(MyFireMontage);
+	if (MyFireMontage && !Montage_IsPlaying(MyFireMontage))
+	{
+		Montage_Play(MyFireMontage);
+	}
 }
 
