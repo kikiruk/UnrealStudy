@@ -19,7 +19,7 @@ public:
 
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-
+	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 private:
 	/** 랜덤 위치를 검색할 반경 (블루프린트에서 설정 가능) */
 	UPROPERTY(EditAnywhere, Category = "Search")

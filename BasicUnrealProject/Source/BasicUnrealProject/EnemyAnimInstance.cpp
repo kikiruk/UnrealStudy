@@ -36,7 +36,7 @@ void UEnemyAnimInstance::AnimateAttackMontage()
 {
 	if (MyAttackMontage && !Montage_IsPlaying(MyAttackMontage))
 	{
-		UE_LOG(LogTemp, Log, TEXT("ATTACK MONTAGE INITIALIZED4444444444444444"));
+		UE_LOG(LogTemp, Log, TEXT("Attack!"));
 		Montage_Play(MyAttackMontage);
 	}
 }

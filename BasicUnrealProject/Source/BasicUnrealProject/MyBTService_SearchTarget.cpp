@@ -15,6 +15,10 @@ UMyBTService_SearchTarget::UMyBTService_SearchTarget()
     
     // 블랙보드 키를 설정합니다. (TargetDistance)
     TargetDistanceKey.AddFloatFilter(this, GET_MEMBER_NAME_CHECKED(UMyBTService_SearchTarget, TargetDistanceKey));
+
+    // 블랙보드 키를 설정합니다. (Target) 여기서 AActor::StaticClass() 를 해도 정상 작동 되어야하나, 되지 않아서 UObject::StaticClass() 로 하니까 잘됨
+    TargetKey.AddObjectFilter(this, GET_MEMBER_NAME_CHECKED(UMyBTService_SearchTarget, TargetKey), UObject::StaticClass());
+    //TargetKey.SelectedKeyName = "TargetKey";
 }
 
 // TickNode 함수: 서비스가 실행될 때마다 호출됩니다.
@@ -74,21 +78,21 @@ void UMyBTService_SearchTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint
                         // 탐지된 객체가 자신이 아닌지 확인합니다.
                         if (OverlappedActor && OverlappedActor != ControlledPawn)
                         {
-                            // 디버그용으로 탐지하는 범위를 시각적으로 표시합니다. (감지가 된 경우 노란색으로 바꿉니다)
-                            DrawDebugSphere(World, PawnLocation, SearchRadius, 12, FColor::Yellow, true, -1.0f);
+                            // 블랙보드에 탐지된 객체를 저장합니다.
+                            BlackboardComp->SetValueAsObject(TargetKey.SelectedKeyName, OverlappedActor);
 
                             // 블랙보드에 탐지된 객체의 위치를 저장합니다.
                             BlackboardComp->SetValueAsVector(TargetLocationKey.SelectedKeyName, OverlappedActor->GetActorLocation());
 
-                            // 디버그용으로 탐지된 객체를 시각적으로 표시합니다.
-                            DrawDebugSphere(World, OverlappedActor->GetActorLocation(), 50.0f, 12, FColor::Red, false, 1.0f);
-
                             // 블랙보드에 탐지된 객체와의 거리를 저장합니다.
                             BlackboardComp->SetValueAsFloat(TargetDistanceKey.SelectedKeyName, FVector::Dist(OverlappedActor->GetActorLocation(), PawnLocation));
 
-                            UE_LOG(LogTemp, Log, TEXT("Distance : %f"), FVector::Dist(OverlappedActor->GetActorLocation(), PawnLocation));
-                            // 디버그 로그에 탐지된 객체의 이름을 출력합니다.
-                            //UE_LOG(LogTemp, Log, TEXT("Detected Actor: %s"), *OverlappedActor->GetName());
+                            // 디버그용으로 탐지하는 범위를 시각적으로 표시합니다. (감지가 된 경우 노란색으로 바꿉니다)
+                            DrawDebugSphere(World, PawnLocation, SearchRadius, 12, FColor::Yellow, true, -1.0f);
+
+                            // 디버그용으로 탐지된 객체를 시각적으로 표시합니다.
+                            DrawDebugSphere(World, OverlappedActor->GetActorLocation(), 50.0f, 12, FColor::Red, false, 1.0f);
+
                             break; // 첫 번째 탐지된 객체를 사용합니다.
                         }
                     }

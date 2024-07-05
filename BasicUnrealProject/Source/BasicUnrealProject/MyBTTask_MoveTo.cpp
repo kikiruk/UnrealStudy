@@ -10,11 +10,13 @@
 #include "GameFramework/Character.h"
 #include "Animation/AnimInstance.h"
 #include "EnemyAnimInstance.h"
+//#include "Navigation/PathFollowingComponent.h"
 
 // 생성자: 노드 이름과 기본 탐색 반경 설정
 UMyBTTask_MoveTo::UMyBTTask_MoveTo()
 {
     NodeName = "Move To Random Location"; // 노드 이름을 "Move To Random Location"으로 설정
+    bNotifyTick = true;
     SearchRadius = 1000.0f; // 기본 탐색 반경을 1000.0f로 설정
 }
 
@@ -61,10 +63,43 @@ EBTNodeResult::Type UMyBTTask_MoveTo::ExecuteTask(UBehaviorTreeComponent& OwnerC
         // 이동 요청이 성공적인 경우 성공 리턴
         if (MoveResult == EPathFollowingRequestResult::RequestSuccessful)
         {
-            return EBTNodeResult::Succeeded;
+            return EBTNodeResult::InProgress;
         }
     }
 
     // 이동 요청이 실패한 경우 실패 리턴
+    UE_LOG(LogTemp, Log, TEXT("AI Task Status: Failed"));
     return EBTNodeResult::Failed;
+}
+
+
+void UMyBTTask_MoveTo::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+{
+    // AIController 가져오기
+    AAIController* AIController = OwnerComp.GetAIOwner();
+
+    // Pawn이 없는 경우 실패 리턴
+    if (AIController == nullptr)
+    {
+        FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+    }
+    else
+    {
+        // AIController와 Pawn 가져오기
+        EPathFollowingStatus::Type moveStatus = AIController->GetMoveStatus();
+    
+        if (moveStatus == EPathFollowingStatus::Idle)
+        {
+            FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+        }
+
+        const TCHAR* StatusString =
+            (moveStatus == EPathFollowingStatus::Idle) ? TEXT("Idle") :
+            (moveStatus == EPathFollowingStatus::Waiting) ? TEXT("Waiting") :
+            (moveStatus == EPathFollowingStatus::Paused) ? TEXT("Paused") :
+            (moveStatus == EPathFollowingStatus::Moving) ? TEXT("Moving") :
+            TEXT("Unknown");
+
+        UE_LOG(LogTemp, Log, TEXT("AI Movement Status: %s"), StatusString);
+    }
 }

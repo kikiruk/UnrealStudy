@@ -18,6 +18,7 @@ EBTNodeResult::Type UMyBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerC
     APawn* ControlledPawn = AIController ? AIController->GetPawn() : nullptr;
 
     ACharacter* Character = Cast<ACharacter>(ControlledPawn);
+    UE_LOG(LogTemp, Log, TEXT("Prepair to attack!"));
     if (Character)
     {
         // Skeletal Mesh Component 가져오기
@@ -30,7 +31,7 @@ EBTNodeResult::Type UMyBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerC
             UEnemyAnimInstance* AnimInstance = Cast<UEnemyAnimInstance>(Instance);
             if (AnimInstance)
             {
-                AnimInstance->AnimateAttackMontage();
+                AnimInstance->AnimateAttackMontage(); // 사용자 정의 함수 AnimateAttackMontage()
             }
         }
     }
