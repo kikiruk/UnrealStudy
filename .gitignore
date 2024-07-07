@@ -76,5 +76,4 @@ BasicUnrealProject/DerivedDataCache/*
 # others
 BasicUnrealProject/.vsconfig
 
-# Visual Studio solution explorer filter settings file
-!BasicUnrealProject/Intermediate/ProjectFiles/BasicUnrealProject.vcxproj.filters
+
