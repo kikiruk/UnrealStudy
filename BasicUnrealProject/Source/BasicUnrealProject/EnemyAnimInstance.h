@@ -17,6 +17,7 @@ class BASICUNREALPROJECT_API UEnemyAnimInstance : public UAnimInstance
 public:
 	UEnemyAnimInstance();
 
+public:
 	virtual void NativeBeginPlay() override;
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;

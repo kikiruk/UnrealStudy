@@ -7,7 +7,8 @@
 #include "Kismet/KismetMathLibrary.h"
 
 UMyAnimInstance::UMyAnimInstance() 
-	: Speed(0.0f), Horizontal(0.0f), Vertical(0.0f), ShouldMove(false), MyCharacter(nullptr)
+	: Speed(0.0f), Horizontal(0.0f), Vertical(0.0f), ShouldMove(false), MyCharacter(nullptr), 
+	MyFireMontage(nullptr)
 {
 	//Fire 몽타주 초기화 코드
 	ConstructorHelpers::FObjectFinder<UAnimMontage> FireAnimMontageConstructer(TEXT(

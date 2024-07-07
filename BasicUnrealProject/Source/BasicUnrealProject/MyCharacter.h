@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
 
+//캐릭터가 공격할때 broadCast할 델리게이트
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnArrowFiredDelegate);
 
 

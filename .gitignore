@@ -75,3 +75,6 @@ BasicUnrealProject/DerivedDataCache/*
 
 # others
 BasicUnrealProject/.vsconfig
+
+# Visual Studio 솔루션탐색기 필터 설정한것 저장하기
+!BasicUnrealProject/Intermediate/ProjectFiles/BasicUnrealProject.vcxproj.filters
