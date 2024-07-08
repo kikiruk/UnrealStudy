@@ -3,10 +3,7 @@
 
 #include "BTService_UpdateTargetLocation.h"
 
-//#include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
-//#include "Kismet/KismetSystemLibrary.h"
-#include "MyCharacter.h"
 #include "MyEnemy.h"
 
 
@@ -37,19 +34,5 @@ void UBTService_UpdateTargetLocation::TickNode(UBehaviorTreeComponent& OwnerComp
         if (!TargetPawn) return;
 
         BlackboardComp->SetValueAsVector(TargetLocationKey.SelectedKeyName, TargetPawn->GetActorLocation());
-
-        // Target 출력 주석
-        //if (AMyCharacter* Character = Cast<AMyCharacter>(TargetPawn))
-        //{
-        //    UE_LOG(LogTemp, Warning, TEXT("Actor is a Character: %s"), *Character->GetName());
-        //}
-        //else if (AMyEnemy* Enemy = Cast<AMyEnemy>(TargetPawn))
-        //{
-        //    UE_LOG(LogTemp, Warning, TEXT("Actor is an Enemy: %s"), *Enemy->GetName());
-        //}
-        //else
-        //{
-        //    UE_LOG(LogTemp, Warning, TEXT("Actor is neither a Character nor an Enemy: %s"), *TargetPawn->GetName());
-        //}
     }
 }

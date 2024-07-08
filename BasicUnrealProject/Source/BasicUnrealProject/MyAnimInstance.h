@@ -33,7 +33,7 @@ private:
 private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
-	class AMyCharacter* MyCharacter;
+	class APlayerCharacter* PlayerCharacter;
 
 public:
 	virtual void NativeInitializeAnimation() override;

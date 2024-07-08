@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "MyCharacter.h"
+#include "PlayerCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -9,7 +9,7 @@
 #include "Arrow.h"
 
 // Sets default values
-AMyCharacter::AMyCharacter() :
+APlayerCharacter::APlayerCharacter() :
 	MyCamera(nullptr), MyCameraSpringArm(nullptr), MyPlayerScreenInstance(nullptr), bMustRotateForTick(false)
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -53,7 +53,7 @@ AMyCharacter::AMyCharacter() :
 }
 
 // Called when the game starts or when spawned
-void AMyCharacter::BeginPlay()
+void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -81,13 +81,13 @@ void AMyCharacter::BeginPlay()
 	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 }
 
-void AMyCharacter::PostInitializeComponents()
+void APlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 }
 
 // Called every frame
-void AMyCharacter::Tick(float DeltaTime)
+void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -127,7 +127,7 @@ void AMyCharacter::Tick(float DeltaTime)
 				PurposeRotationYaw = FMath::FInterpTo(CurrentYaw, CurrentYaw + CameraCharacterDeltaDegree, DeltaTime, 10.0f); //부드럽게 회전합니다.
 			}
 			// 차이가 130도 이상일경우 그 차이가 없어질때까지 회전함 그 회전해야하는지여부를 bMustRotateForTick(지역변수) 로저장함
-			else if (FMath::Abs(CameraCharacterDeltaDegree) >= 130.f) 
+			else if (FMath::Abs(CameraCharacterDeltaDegree) >= 130.f)
 			{
 				bMustRotateForTick = true;
 			}
@@ -141,7 +141,7 @@ void AMyCharacter::Tick(float DeltaTime)
 		PurposeRotation.Yaw = PurposeRotationYaw;
 		SetActorRotation(PurposeRotation);
 	}
-	else if(bMustRotateForTick == true)
+	else if (bMustRotateForTick == true)
 	{
 		//최대 5도 까지 차이 날수 있으므로 Yaw 값을 Target Yaw 와 맟춰줌
 		bMustRotateForTick = false;
@@ -161,42 +161,42 @@ void AMyCharacter::Tick(float DeltaTime)
 }
 
 // Called to bind functionality to input
-void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AMyCharacter::doMoveForward);
-	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AMyCharacter::doMoveRight);
-	PlayerInputComponent->BindAxis(TEXT("MouseUp"), this, &AMyCharacter::doMouseUp);
-	PlayerInputComponent->BindAxis(TEXT("MouseRight"), this, &AMyCharacter::doMouseRight);
-	PlayerInputComponent->BindAxis(TEXT("MouseWheel"), this, &AMyCharacter::doChameraArmLengthSetup);
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerCharacter::doMoveForward);
+	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &APlayerCharacter::doMoveRight);
+	PlayerInputComponent->BindAxis(TEXT("MouseUp"), this, &APlayerCharacter::doMouseUp);
+	PlayerInputComponent->BindAxis(TEXT("MouseRight"), this, &APlayerCharacter::doMouseRight);
+	PlayerInputComponent->BindAxis(TEXT("MouseWheel"), this, &APlayerCharacter::doChameraArmLengthSetup);
 
 	//언리얼 기본 제공 함수 Jump 를 그대로 사용함.
-	PlayerInputComponent->BindAction(TEXT("LeftClick"), EInputEvent::IE_Pressed, this, &AMyCharacter::doLeftClick);
-	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &AMyCharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("LeftClick"), EInputEvent::IE_Pressed, this, &APlayerCharacter::doLeftClick);
+	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Jump);
 }
 
-void AMyCharacter::doMoveForward(float val)
+void APlayerCharacter::doMoveForward(float val)
 {
 	AddMovementInput(GetActorForwardVector(), val);
 }
 
-void AMyCharacter::doMoveRight(float val)
+void APlayerCharacter::doMoveRight(float val)
 {
 	AddMovementInput(GetActorRightVector(), val);
 }
 
-void AMyCharacter::doMouseUp(float val)
+void APlayerCharacter::doMouseUp(float val)
 {
 	AddControllerPitchInput(val);
 }
 
-void AMyCharacter::doMouseRight(float val)
+void APlayerCharacter::doMouseRight(float val)
 {
 	AddControllerYawInput(val);
 }
 
-void AMyCharacter::doChameraArmLengthSetup(float val)
+void APlayerCharacter::doChameraArmLengthSetup(float val)
 {
 	//카메라 암의 길이 설정
 	float NewCameraArmLength = MyCameraSpringArm->TargetArmLength + val * 5;
@@ -205,7 +205,7 @@ void AMyCharacter::doChameraArmLengthSetup(float val)
 	MyCameraSpringArm->TargetArmLength = NewCameraArmLength;
 }
 
-void AMyCharacter::doLeftClick()
+void APlayerCharacter::doLeftClick()
 {
 	UAnimInstance* MyAnimInstance = GetMesh()->GetAnimInstance();
 

@@ -6,7 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "NavigationSystem.h"
 
-AMyAIController::AMyAIController()
+AMyAIController::AMyAIController() : BehaviorTreeAsset (nullptr), BlackboardComponent (nullptr)
 {
 	// 블랙보드 컴포넌트를 초기화한다.
 	BlackboardComponent = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
