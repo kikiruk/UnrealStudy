@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTTask_EnemyAttack.h"
+#include "AI/BTTask_EnemyAttack.h"
 #include "AIController.h"
 #include "GameFramework/Character.h"
-#include "EnemyAnimInstance.h"
+#include "Animations/EnemyAnimInstance.h"
 
 UBTTask_EnemyAttack::UBTTask_EnemyAttack()
 {

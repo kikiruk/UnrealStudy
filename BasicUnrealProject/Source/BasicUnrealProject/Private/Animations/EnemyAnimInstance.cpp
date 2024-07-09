@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "EnemyAnimInstance.h"
+#include "Animations/EnemyAnimInstance.h"
 
 UEnemyAnimInstance::UEnemyAnimInstance()
 	: MyAttackMontage(nullptr)

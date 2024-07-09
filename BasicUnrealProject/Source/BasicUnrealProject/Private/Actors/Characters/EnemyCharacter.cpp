@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "EnemyCharacter.h"
-#include "EnemyAIController.h"
+#include "Actors/Characters/EnemyCharacter.h"
+#include "Controllers/EnemyAIController.h"
 #include "Components/CapsuleComponent.h"
 
 // Sets default values

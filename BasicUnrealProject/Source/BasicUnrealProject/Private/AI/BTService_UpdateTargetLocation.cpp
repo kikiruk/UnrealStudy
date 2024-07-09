@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTService_UpdateTargetLocation.h"
+#include "AI/BTService_UpdateTargetLocation.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTService_UpdateTargetLocation::UBTService_UpdateTargetLocation()

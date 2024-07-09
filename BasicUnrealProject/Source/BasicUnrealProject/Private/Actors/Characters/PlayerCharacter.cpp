@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "PlayerCharacter.h"
+#include "Actors/Characters/PlayerCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Blueprint/UserWidget.h"
-#include "GameFramework/CharacterMovementComponent.h"
-#include "Arrow.h"
+#include "GameFramework/CharacterMovementComponent.h" // 이거 꼭 넣어야하는지 확인
+#include "Actors/Weapons/Arrow.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter() :

@@ -1,4 +1,4 @@
-#include "BTTask_EnemyMoveToRandom.h"
+#include "AI/BTTask_EnemyMoveToRandom.h"
 #include "AIController.h"
 #include "NavigationSystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -9,7 +9,6 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Character.h"
 #include "Animation/AnimInstance.h"
-#include "EnemyAnimInstance.h"
 
 // 생성자: 노드 이름과 기본 탐색 반경 설정
 UBTTask_EnemyMoveToRandom::UBTTask_EnemyMoveToRandom()
