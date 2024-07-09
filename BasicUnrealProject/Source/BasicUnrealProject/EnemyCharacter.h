@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "MyEnemy.generated.h"
+#include "EnemyCharacter.generated.h"
 
 UCLASS()
-class BASICUNREALPROJECT_API AMyEnemy : public ACharacter
+class BASICUNREALPROJECT_API AEnemyCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	AMyEnemy();
+	AEnemyCharacter();
 
 public:	
 	// Called every frame

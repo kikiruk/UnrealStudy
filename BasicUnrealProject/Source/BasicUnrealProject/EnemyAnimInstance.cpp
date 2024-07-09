@@ -2,7 +2,7 @@
 
 
 #include "EnemyAnimInstance.h"
-#include "MyEnemy.h"
+#include "EnemyCharacter.h"
 
 UEnemyAnimInstance::UEnemyAnimInstance()
 	: PawnOwnedEnemy(nullptr), MyAttackMontage(nullptr)
@@ -22,7 +22,7 @@ void UEnemyAnimInstance::NativeBeginPlay()
 	Super::NativeBeginPlay();
 
 	// 캐릭터 인스턴스를 가져옴
-	PawnOwnedEnemy = Cast<AMyEnemy>(TryGetPawnOwner());
+	PawnOwnedEnemy = Cast<AEnemyCharacter>(TryGetPawnOwner());
 }
 
 void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)

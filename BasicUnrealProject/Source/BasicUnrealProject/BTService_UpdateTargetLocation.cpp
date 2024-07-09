@@ -2,10 +2,7 @@
 
 
 #include "BTService_UpdateTargetLocation.h"
-
 #include "BehaviorTree/BlackboardComponent.h"
-#include "MyEnemy.h"
-
 
 UBTService_UpdateTargetLocation::UBTService_UpdateTargetLocation()
 {

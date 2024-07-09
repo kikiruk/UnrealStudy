@@ -28,5 +28,5 @@ private:
 	class UAnimMontage* MyAttackMontage;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
-	class AMyEnemy* PawnOwnedEnemy;
+	class AEnemyCharacter* PawnOwnedEnemy;
 };
