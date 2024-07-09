@@ -1,25 +1,26 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MyAIController.h"
+#include "EnemyAIController.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "NavigationSystem.h"
 
-AMyAIController::AMyAIController() : BehaviorTreeAsset (nullptr), BlackboardComponent (nullptr)
+AEnemyAIController::AEnemyAIController() : BehaviorTreeAsset (nullptr), BlackboardComponent (nullptr)
 {
 	// 블랙보드 컴포넌트를 초기화한다.
 	BlackboardComponent = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
 
     // 비헤이비어 트리 에셋을 찾고, 로드한다.
-    static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/MyBlueprint/BT_MyBehaviorTree.BT_MyBehaviorTree'"));
-    if (BTObject.Succeeded())
+    static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTConstructor(TEXT("/Script/AIModule.BehaviorTree'/Game/MyBlueprint/BT_Enemy.BT_Enemy'"));
+
+    if (BTConstructor.Succeeded())
     {
-        BehaviorTreeAsset = BTObject.Object;
+        BehaviorTreeAsset = BTConstructor.Object;
     }
 }
 
-void AMyAIController::BeginPlay()
+void AEnemyAIController::BeginPlay()
 {
     Super::BeginPlay();
 
@@ -34,7 +35,7 @@ void AMyAIController::BeginPlay()
     }
 }
 
-void AMyAIController::Tick(float DeltaSeconds)
+void AEnemyAIController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds); // 반드시 호출해야 합니다
 }

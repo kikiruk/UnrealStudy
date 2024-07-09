@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "EnemyCharacter.h"
-#include "MyAIController.h"
+#include "EnemyAIController.h"
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
@@ -11,7 +11,7 @@ AEnemyCharacter::AEnemyCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// AI Controller 클래스 지정
-	AIControllerClass = AMyAIController::StaticClass();
+	AIControllerClass = AEnemyAIController::StaticClass();
 
 	RootComponent = GetCapsuleComponent();
 	GetMesh()->SetupAttachment(RootComponent);

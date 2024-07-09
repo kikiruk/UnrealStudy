@@ -66,10 +66,10 @@ void APlayerCharacter::BeginPlay()
 		추후 PlayerController 뿐만아니라 다른용도의 재사용성도 고려하면서,
 		 안정성을 부여함
 		*/
-		APlayerController* PC = Cast<APlayerController>(GetController());
-		if (IsValid(PC))
+		APlayerController* playerController = Cast<APlayerController>(GetController());
+		if (IsValid(playerController))
 		{
-			MyPlayerScreenInstance = CreateWidget<UUserWidget>(PC, MyPlayerScreenClass);
+			MyPlayerScreenInstance = CreateWidget<UUserWidget>(playerController, MyPlayerScreenClass);
 		}
 
 		if (IsValid(MyPlayerScreenInstance))
