@@ -2,10 +2,9 @@
 
 
 #include "EnemyAnimInstance.h"
-#include "EnemyCharacter.h"
 
 UEnemyAnimInstance::UEnemyAnimInstance()
-	: PawnOwnedEnemy(nullptr), MyAttackMontage(nullptr)
+	: MyAttackMontage(nullptr)
 {
 	ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMontage(TEXT(
 		"/Script/Engine.AnimMontage'/Game/MyBlueprint/Animation/Enemy/AM_Attack.AM_Attack'"));
@@ -14,15 +13,11 @@ UEnemyAnimInstance::UEnemyAnimInstance()
 	{
 		MyAttackMontage = AttackMontage.Object;
 	}
-
 }
 
 void UEnemyAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
-
-	// 캐릭터 인스턴스를 가져옴
-	PawnOwnedEnemy = Cast<AEnemyCharacter>(TryGetPawnOwner());
 }
 
 void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)

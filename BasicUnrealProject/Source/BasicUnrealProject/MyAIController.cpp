@@ -16,7 +16,6 @@ AMyAIController::AMyAIController() : BehaviorTreeAsset (nullptr), BlackboardComp
     if (BTObject.Succeeded())
     {
         BehaviorTreeAsset = BTObject.Object;
-        UE_LOG(LogTemp, Warning, TEXT("BehaviorTree started: %s"), *BehaviorTreeAsset->GetName());
     }
 }
 
@@ -31,7 +30,6 @@ void AMyAIController::BeginPlay()
         {
             // 비헤이비어트리를 실행한다
             RunBehaviorTree(BehaviorTreeAsset);
-            UE_LOG(LogTemp, Warning, TEXT("BehaviorTree started: %s"), *BehaviorTreeAsset->GetName());
         }
     }
 }

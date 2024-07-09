@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MyAnimInstance.h"
+#include "PlayerAnimInstance.h"
 #include "PlayerCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
-UMyAnimInstance::UMyAnimInstance() 
+UPlayerAnimInstance::UPlayerAnimInstance() 
 	: Speed(0.0f), Horizontal(0.0f), Vertical(0.0f), ShouldMove(false), PlayerCharacter(nullptr), 
 	MyFireMontage(nullptr)
 {
@@ -19,12 +19,12 @@ UMyAnimInstance::UMyAnimInstance()
 	}
 }
 
-void UMyAnimInstance::NativeInitializeAnimation()
+void UPlayerAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
 }
 
-void UMyAnimInstance::NativeBeginPlay()
+void UPlayerAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
 
@@ -33,11 +33,11 @@ void UMyAnimInstance::NativeBeginPlay()
 	if (PlayerCharacter)
 	{
 		// 캐릭터의 이벤트에 바인딩
-		PlayerCharacter->OnArrowFired.AddDynamic(this, &UMyAnimInstance::FireMontagePlay_BindToCharacterEvents);
+		PlayerCharacter->OnArrowFired.AddDynamic(this, &UPlayerAnimInstance::FireMontagePlay_BindToCharacterEvents);
 	}
 }
 
-void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
+void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 	if (IsValid(PlayerCharacter))
@@ -79,7 +79,7 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 }
 
-void UMyAnimInstance::FireMontagePlay_BindToCharacterEvents()
+void UPlayerAnimInstance::FireMontagePlay_BindToCharacterEvents()
 {
 	if (MyFireMontage && !Montage_IsPlaying(MyFireMontage))
 	{

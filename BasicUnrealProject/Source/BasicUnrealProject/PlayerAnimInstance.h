@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
-#include "MyAnimInstance.generated.h"
+#include "PlayerAnimInstance.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BASICUNREALPROJECT_API UMyAnimInstance : public UAnimInstance
+class BASICUNREALPROJECT_API UPlayerAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 public:
-	UMyAnimInstance();
+	UPlayerAnimInstance();
 
 private:
 	UPROPERTY(Category = "Animation", EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true));

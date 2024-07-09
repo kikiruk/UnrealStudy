@@ -45,7 +45,7 @@ APlayerCharacter::APlayerCharacter() :
 	}
 
 	//블루프린트에서 할당해주던 Chracter 의 AnimClass를 C++ 코드로 할당
-	ConstructorHelpers::FClassFinder<UAnimInstance> AnimClass(TEXT("/Script/Engine.AnimBlueprint'/Game/MyBlueprint/Animation/Player/MyAnimBP.MyAnimBP_C'"));
+	ConstructorHelpers::FClassFinder<UAnimInstance> AnimClass(TEXT("/Script/Engine.AnimBlueprint'/Game/MyBlueprint/Animation/Player/AnimBP_Player.AnimBP_Player_C'"));
 	if (AnimClass.Succeeded())
 	{
 		GetMesh()->SetAnimClass(AnimClass.Class);
@@ -207,8 +207,6 @@ void APlayerCharacter::doChameraArmLengthSetup(float val)
 
 void APlayerCharacter::doLeftClick()
 {
-	UAnimInstance* MyAnimInstance = GetMesh()->GetAnimInstance();
-
 	//스켈레탈 메쉬의 arrow_anchor 라는 이름을 가진 소켓을 가져온다.
 	FTransform SocketTranceform = GetMesh()->GetSocketTransform(FName("arrow_anchor"));
 	FVector SocketLocation = SocketTranceform.GetLocation();

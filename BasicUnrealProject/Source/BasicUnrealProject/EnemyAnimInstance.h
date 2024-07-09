@@ -26,7 +26,4 @@ public:
 private:
 	UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	class UAnimMontage* MyAttackMontage;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
-	class AEnemyCharacter* PawnOwnedEnemy;
 };
