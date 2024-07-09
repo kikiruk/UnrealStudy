@@ -1,4 +1,4 @@
-#include "MyBTTask_MoveTo.h"
+#include "BTTask_EnemyMoveToRandom.h"
 #include "AIController.h"
 #include "NavigationSystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -12,15 +12,15 @@
 #include "EnemyAnimInstance.h"
 
 // 생성자: 노드 이름과 기본 탐색 반경 설정
-UMyBTTask_MoveTo::UMyBTTask_MoveTo()
+UBTTask_EnemyMoveToRandom::UBTTask_EnemyMoveToRandom()
 {
-    NodeName = "Move To Random Location"; // 노드 이름을 "Move To Random Location"으로 설정
+    NodeName = "Enemy Move To Random Location"; // 노드 이름을 "Move To Random Location"으로 설정
     bNotifyTick = true;
     SearchRadius = 1000.0f; // 기본 탐색 반경을 1000.0f로 설정
 }
 
 // 태스크 실행 함수
-EBTNodeResult::Type UMyBTTask_MoveTo::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBTTask_EnemyMoveToRandom::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
     // AIController와 Pawn 가져오기
     AAIController* AIController = OwnerComp.GetAIOwner();
@@ -72,7 +72,7 @@ EBTNodeResult::Type UMyBTTask_MoveTo::ExecuteTask(UBehaviorTreeComponent& OwnerC
 }
 
 
-void UMyBTTask_MoveTo::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+void UBTTask_EnemyMoveToRandom::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
     // AIController 가져오기
     AAIController* AIController = OwnerComp.GetAIOwner();

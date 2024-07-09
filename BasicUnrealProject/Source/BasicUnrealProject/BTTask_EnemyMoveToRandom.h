@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_MoveTo.h"
-#include "MyBTTask_MoveTo.generated.h"
+#include "BTTask_EnemyMoveToRandom.generated.h"
 
 /**
  * 
  */
 UCLASS(Blueprintable)
-class BASICUNREALPROJECT_API UMyBTTask_MoveTo : public UBTTask_MoveTo
+class BASICUNREALPROJECT_API UBTTask_EnemyMoveToRandom : public UBTTask_MoveTo
 {
 	GENERATED_BODY()
 	
 public:
-	UMyBTTask_MoveTo();
+	UBTTask_EnemyMoveToRandom();
 
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;

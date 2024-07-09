@@ -1,17 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MyBTTask_Attack.h"
+#include "BTTask_EnemyAttack.h"
 #include "AIController.h"
 #include "GameFramework/Character.h"
 #include "EnemyAnimInstance.h"
 
-UMyBTTask_Attack::UMyBTTask_Attack()
+UBTTask_EnemyAttack::UBTTask_EnemyAttack()
 {
     NodeName = "Enemy Attack";
 }
 
-EBTNodeResult::Type UMyBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBTTask_EnemyAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
     // AIController와 Pawn 가져오기
     AAIController* AIController = OwnerComp.GetAIOwner();

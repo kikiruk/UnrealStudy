@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Services/BTService_BlackboardBase.h"
-#include "MyBTService_SearchTarget.generated.h"
+#include "BTService_EnemyMain.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BASICUNREALPROJECT_API UMyBTService_SearchTarget : public UBTService_BlackboardBase
+class BASICUNREALPROJECT_API UBTService_EnemyMain : public UBTService_BlackboardBase
 {
 	GENERATED_BODY()
 	
 public:
-	UMyBTService_SearchTarget();
+	UBTService_EnemyMain();
 
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;

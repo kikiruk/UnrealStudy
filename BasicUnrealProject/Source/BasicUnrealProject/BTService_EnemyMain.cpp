@@ -1,28 +1,28 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "MyBTService_SearchTarget.h"
+#include "BTService_EnemyMain.h"
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-UMyBTService_SearchTarget::UMyBTService_SearchTarget()
+UBTService_EnemyMain::UBTService_EnemyMain()
 {
-    NodeName = "Search Target";    // 노드의 이름을 "Search Target"으로 설정합니다.
+    NodeName = "Enemy Main Service";    // 노드의 이름을 "Enemy Main Service"으로 설정합니다.
     Interval = 1.0f;               // 서비스가 실행되는 간격을 1.0초로 설정합니다.
 
     // 블랙보드 키를 설정합니다. (TargetLocationKey)
-    TargetLocationKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UMyBTService_SearchTarget, TargetLocationKey)); 
+    TargetLocationKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UBTService_EnemyMain, TargetLocationKey)); 
     
     // 블랙보드 키를 설정합니다. (TargetDistance)
-    TargetDistanceKey.AddFloatFilter(this, GET_MEMBER_NAME_CHECKED(UMyBTService_SearchTarget, TargetDistanceKey));
+    TargetDistanceKey.AddFloatFilter(this, GET_MEMBER_NAME_CHECKED(UBTService_EnemyMain, TargetDistanceKey));
 
     // 블랙보드 키를 설정합니다. (Target) 여기서 AActor::StaticClass() 를 해도 정상 작동 되어야하나, 되지 않아서 UObject::StaticClass() 로 하니까 잘됨
-    TargetKey.AddObjectFilter(this, GET_MEMBER_NAME_CHECKED(UMyBTService_SearchTarget, TargetKey), UObject::StaticClass());
+    TargetKey.AddObjectFilter(this, GET_MEMBER_NAME_CHECKED(UBTService_EnemyMain, TargetKey), UObject::StaticClass());
     //TargetKey.SelectedKeyName = "TargetKey";
 }
 
 // TickNode 함수: 서비스가 실행될 때마다 호출됩니다.
-void UMyBTService_SearchTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+void UBTService_EnemyMain::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
  
     Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
