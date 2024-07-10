@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Animation/AnimInstance.h"
+#include "BaseAnimInstance.h"
 #include "PlayerAnimInstance.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BASICUNREALPROJECT_API UPlayerAnimInstance : public UAnimInstance
+class BASICUNREALPROJECT_API UPlayerAnimInstance : public UBaseAnimInstance
 {
 	GENERATED_BODY()
 public:

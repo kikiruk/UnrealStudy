@@ -2,7 +2,7 @@
 
 
 #include "Animations/PlayerAnimInstance.h"
-#include "Actors/Characters/PlayerCharacter.h"
+#include "Actors/Characters/PlayerCharacter.h" //꼭 PlayerCharcter가아닌 그냥 Character로도 될거같으니 알아보기
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -29,7 +29,7 @@ void UPlayerAnimInstance::NativeBeginPlay()
 	Super::NativeBeginPlay();
 
 	// 캐릭터 인스턴스를 가져옴
-	PlayerCharacter = Cast<APlayerCharacter>(TryGetPawnOwner());
+	PlayerCharacter = Cast<APlayerCharacter>(TryGetPawnOwner()); // 그냥 지역변수로 써도 될거같은데..? 고민해보기
 	if (PlayerCharacter)
 	{
 		// 캐릭터의 이벤트에 바인딩

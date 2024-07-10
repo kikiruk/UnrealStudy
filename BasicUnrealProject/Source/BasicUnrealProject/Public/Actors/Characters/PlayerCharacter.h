@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "BaseCharacter.h"
 #include "PlayerCharacter.generated.h"
 
 //캐릭터가 공격할때 broadCast할 델리게이트
@@ -11,7 +11,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnArrowFiredDelegate);
 
 
 UCLASS()
-class BASICUNREALPROJECT_API APlayerCharacter : public ACharacter
+class BASICUNREALPROJECT_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 

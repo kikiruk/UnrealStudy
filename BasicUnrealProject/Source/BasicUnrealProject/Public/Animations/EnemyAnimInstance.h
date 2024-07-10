@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Animation/AnimInstance.h"
+#include "BaseAnimInstance.h"
 #include "EnemyAnimInstance.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BASICUNREALPROJECT_API UEnemyAnimInstance : public UAnimInstance
+class BASICUNREALPROJECT_API UEnemyAnimInstance : public UBaseAnimInstance
 {
 	GENERATED_BODY()
 

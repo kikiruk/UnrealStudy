@@ -3,17 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BaseCharacter.h"
-#include "EnemyCharacter.generated.h"
+#include "GameFramework/Character.h"
+#include "BaseCharacter.generated.h"
 
 UCLASS()
-class BASICUNREALPROJECT_API AEnemyCharacter : public ABaseCharacter
+class BASICUNREALPROJECT_API ABaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	AEnemyCharacter();
+	ABaseCharacter();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 public:	
 	// Called every frame
@@ -22,7 +26,4 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 };
