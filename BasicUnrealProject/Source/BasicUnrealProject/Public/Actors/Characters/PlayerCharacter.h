@@ -62,5 +62,4 @@ private:
 	//위젯블루프린트 클래스의 객체 (인스턴스) 
 	UPROPERTY(Category = "UI", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	UUserWidget* MyPlayerScreenInstance;
-
 };

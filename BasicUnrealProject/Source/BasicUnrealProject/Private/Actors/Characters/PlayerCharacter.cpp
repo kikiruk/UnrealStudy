@@ -118,7 +118,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 	{
 		//FindDeltaAngleDegrees 함수를 사용함으로써 캐릭터 회전시 반대로 회전하는 현상을 예방합니다.
 		float CameraCharacterDeltaDegree = FMath::FindDeltaAngleDegrees(CurrentYaw, TargetYaw);
-		bool isChracterFalling = GetMovementComponent()->IsFalling();
+		bool isChracterFalling = GetCharacterMovement()->IsFalling();
 
 		if (!isChracterFalling) //공중에 떠 있는 중이 아닐때 
 		{
@@ -149,7 +149,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 		SetActorRotation(PurposeRotation);
 	}
 
-	FVector ActorVelocity = GetMovementComponent()->Velocity; //월드 좌표계에서 character 의 Velocity
+	FVector ActorVelocity = GetCharacterMovement()->Velocity; //월드 좌표계에서 character 의 Velocity
 	FVector ActorLocalVelocity = GetActorRotation().UnrotateVector(ActorVelocity); //현 시점 Camera 에서 character 의 Velocity
 
 	GetCharacterMovement()->MaxWalkSpeed = 600.f;

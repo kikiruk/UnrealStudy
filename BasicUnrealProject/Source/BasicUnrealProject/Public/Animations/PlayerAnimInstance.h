@@ -32,6 +32,8 @@ private:
 
 private:
 
+	// PlayerCharacter를 멤버 변수로 저장하여 NativeUpdateAnimation에서 반복적으로 캐스팅하지 않도록 합니다.
+	// 게임 플레이 중 캐릭터가 변경될 수 있으므로 필요 시 이 변수를 초기화하거나 갱신해야 합니다.
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	class APlayerCharacter* PlayerCharacter;
 
