@@ -11,7 +11,7 @@ UPlayerAnimInstance::UPlayerAnimInstance()
 {
 	//Fire 몽타주 초기화 코드
 	ConstructorHelpers::FObjectFinder<UAnimMontage> FireAnimMontageConstructer(TEXT(
-		"'/Game/ParagonSparrow/Characters/Heroes/Sparrow/Animations/Primary_Fire_Med_Montage.Primary_Fire_Med_Montage'"));
+		"/Script/Engine.AnimMontage'/Game/MyBlueprint/Animation/Player/Primary_Fire_Med_Montage.Primary_Fire_Med_Montage'"));
 	if (FireAnimMontageConstructer.Succeeded())
 	{
 		MyFireMontage = FireAnimMontageConstructer.Object;

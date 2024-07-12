@@ -62,4 +62,12 @@ private:
 	//위젯블루프린트 클래스의 객체 (인스턴스) 
 	UPROPERTY(Category = "UI", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	UUserWidget* MyPlayerScreenInstance;
+
+private:
+	// 이 변수는 
+	UPROPERTY(Category = "Attack", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	bool bCanBeFireArrow;
+
+public:
+	void ResetCanBeFireArrowTrue();
 };
