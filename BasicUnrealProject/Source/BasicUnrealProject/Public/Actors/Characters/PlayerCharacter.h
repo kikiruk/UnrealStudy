@@ -34,8 +34,8 @@ private:
 
 private:
 	/*오로지 Tick 함수에서만 사용할 변수입니다.다른함수에서는 사용하지 마세요
-	목적Yaw 와 현재Yaw 값의 차이가 90 도 이상일때 부드럽게 목적Yaw 값으로 회전하려고 하는데,
-	회전하는 도중 90도 이하가 되면 멈춰버려서 목적Yaw 에 도달하지 못하는 문제가 발생하여서
+	목적Yaw 와 현재Yaw 값의 차이가 130 도 이상일때 부드럽게 목적Yaw 값으로 회전하려고 하는데,
+	회전하는 도중 130도 이하가 되면 멈춰버려서 목적Yaw 에 도달하지 못하는 문제가 발생하여서
 	회전을 해야한다는 bool 값을 기억해야하기때문에 지역변수로 생성함.*/
 	UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	bool bMustRotateForTick;

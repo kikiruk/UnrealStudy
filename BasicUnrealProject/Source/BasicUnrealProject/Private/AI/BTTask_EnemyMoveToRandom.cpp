@@ -91,13 +91,14 @@ void UBTTask_EnemyMoveToRandom::TickTask(UBehaviorTreeComponent& OwnerComp, uint
             FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
         }
 
-        const TCHAR* StatusString =
-            (moveStatus == EPathFollowingStatus::Idle) ? TEXT("Idle") :
-            (moveStatus == EPathFollowingStatus::Waiting) ? TEXT("Waiting") :
-            (moveStatus == EPathFollowingStatus::Paused) ? TEXT("Paused") :
-            (moveStatus == EPathFollowingStatus::Moving) ? TEXT("Moving") :
-            TEXT("Unknown");
-
-        UE_LOG(LogTemp, Log, TEXT("AI Movement Status: %s"), StatusString);
+        // AI 상태 출력용 테스트 코드 주석
+        //const TCHAR* StatusString =
+        //    (moveStatus == EPathFollowingStatus::Idle) ? TEXT("Idle") :
+        //    (moveStatus == EPathFollowingStatus::Waiting) ? TEXT("Waiting") :
+        //    (moveStatus == EPathFollowingStatus::Paused) ? TEXT("Paused") :
+        //    (moveStatus == EPathFollowingStatus::Moving) ? TEXT("Moving") :
+        //    TEXT("Unknown");
+        //
+        //UE_LOG(LogTemp, Log, TEXT("AI Movement Status: %s"), StatusString);
     }
 }

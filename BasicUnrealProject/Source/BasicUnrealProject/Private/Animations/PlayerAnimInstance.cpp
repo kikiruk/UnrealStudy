@@ -86,3 +86,8 @@ void UPlayerAnimInstance::FireMontagePlay_BindToCharacterEvents()
 	}
 }
 
+void UPlayerAnimInstance::AnimNotify_Test()
+{
+	UE_LOG(LogTemp, Warning, TEXT("AnimNotify_Test@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+}
+

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AnimNotify_PlayerFire.h"
+#include "Animations/AnimNotify_PlayerFire.h"
 #include "Actors/Characters/PlayerCharacter.h"
 
 void UAnimNotify_PlayerFire::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)

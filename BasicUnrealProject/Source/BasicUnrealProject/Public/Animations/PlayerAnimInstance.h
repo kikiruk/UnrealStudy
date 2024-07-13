@@ -49,4 +49,9 @@ private:
 	// 캐릭터의 이벤트 바인딩을 위한 함수
 	UFUNCTION(BlueprintCallable)
 	void FireMontagePlay_BindToCharacterEvents();
+
+public:
+	UFUNCTION()
+	void AnimNotify_Test();
+
 };
