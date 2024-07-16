@@ -50,7 +50,7 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void FireMontagePlay_BindToCharacterEvents();
 
-public:
+private:
 	UFUNCTION()
 	void AnimNotify_Test();
 

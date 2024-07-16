@@ -21,9 +21,4 @@ public:
 	virtual void NativeBeginPlay() override;
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
-
-	void AnimateAttackMontage();
-private:
-	UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
-	class UAnimMontage* MyAttackMontage;
 };

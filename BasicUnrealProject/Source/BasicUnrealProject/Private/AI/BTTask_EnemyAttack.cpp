@@ -4,7 +4,7 @@
 #include "AI/BTTask_EnemyAttack.h"
 #include "AIController.h"
 #include "GameFramework/Character.h"
-#include "Animations/EnemyAnimInstance.h"
+#include "Actors/Characters/EnemyCharacter.h"
 
 UBTTask_EnemyAttack::UBTTask_EnemyAttack()
 {
@@ -16,24 +16,11 @@ EBTNodeResult::Type UBTTask_EnemyAttack::ExecuteTask(UBehaviorTreeComponent& Own
     // AIController와 Pawn 가져오기
     AAIController* AIController = OwnerComp.GetAIOwner();
     APawn* ControlledPawn = AIController ? AIController->GetPawn() : nullptr;
+    AEnemyCharacter* enemyCharacter = Cast<AEnemyCharacter>(ControlledPawn);
 
-    ACharacter* Character = Cast<ACharacter>(ControlledPawn);
-    UE_LOG(LogTemp, Log, TEXT("Prepair to attack!"));
-    if (Character)
+    if (enemyCharacter)
     {
-        // Skeletal Mesh Component 가져오기
-        USkeletalMeshComponent* SkeletalMeshComponent = Character->GetMesh();
-        if (SkeletalMeshComponent)
-        {
-            // AnimInstance 가져오기
-            UAnimInstance* Instance = SkeletalMeshComponent->GetAnimInstance();
-
-            UEnemyAnimInstance* AnimInstance = Cast<UEnemyAnimInstance>(Instance);
-            if (AnimInstance)
-            {
-                AnimInstance->AnimateAttackMontage(); // 사용자 정의 함수 AnimateAttackMontage()
-            }
-        }
+        enemyCharacter->Attack();
     }
 
 	return EBTNodeResult::Type();
