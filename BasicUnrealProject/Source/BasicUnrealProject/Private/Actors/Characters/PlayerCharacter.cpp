@@ -6,7 +6,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/CharacterMovementComponent.h" // 이거 꼭 넣어야하는지 확인
-#include "Actors/Weapons/Arrow.h"
+#include "Actors/Components/HealthComponent.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter() :
@@ -18,6 +18,7 @@ APlayerCharacter::APlayerCharacter() :
 
 	MyCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("MySpringArm"));
 	MyCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MyCamera"));
+	PlayerHealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 
 	//Capsule <- CameraSpringArm <- Camera 이렇게 붙임
 	MyCameraSpringArm->SetupAttachment(GetCapsuleComponent());
@@ -75,7 +76,7 @@ void APlayerCharacter::BeginPlay()
 
 		if (IsValid(MyPlayerScreenInstance))
 		{
-			MyPlayerScreenInstance->AddToViewport();
+			//MyPlayerScreenInstance->AddToViewport(); // 형편없는 Aim 잠시동안 안보이게 설정
 		}
 	}
 
@@ -189,6 +190,14 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Jump);
 }
 
+float APlayerCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	PlayerHealthComponent->DecreaseHealth(ActualDamage);
+	return ActualDamage;
+}
+
 void APlayerCharacter::doMoveForward(float val)
 {
 	AddMovementInput(GetActorForwardVector(), val);
@@ -236,7 +245,7 @@ void APlayerCharacter::doLeftClick()
 		FActorSpawnParameters params;
 		params.Owner = this;
 
-		GetWorld()->SpawnActor<AArrow>(SocketLocation, SocketRotation, params);
+		GetWorld()->SpawnActor<AActor>(ArrowBlueprint, SocketLocation, SocketRotation, params);
 
 		// 이벤트 델리게이트 호출
 		OnArrowFired.Broadcast();

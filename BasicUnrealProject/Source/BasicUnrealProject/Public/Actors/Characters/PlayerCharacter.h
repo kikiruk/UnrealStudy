@@ -46,6 +46,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -59,10 +61,17 @@ private:
 	UPROPERTY(EditAnywhere)
 	class USpringArmComponent* MyCameraSpringArm;
 
+	//Player 의 HP 와 죽음 등을 관리하는 컴포넌트
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = true))
+	class UHealthComponent* PlayerHealthComponent;
+
 	//위젯블루프린트 클래스의 객체 (인스턴스) 
 	UPROPERTY(Category = "UI", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	UUserWidget* MyPlayerScreenInstance;
 
+	// 블루프린트 클래스를 참조하기 위한 변수 선언 (발사용 화살)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning", meta = (AllowPrivateAccess = true))
+    TSubclassOf<AActor> ArrowBlueprint;
 private:
 	// 이 변수는 
 	UPROPERTY(Category = "Attack", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))

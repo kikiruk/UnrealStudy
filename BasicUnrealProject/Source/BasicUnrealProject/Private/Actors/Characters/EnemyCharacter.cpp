@@ -4,6 +4,7 @@
 #include "Controllers/EnemyAIController.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter() : AttackMontage(nullptr)
@@ -71,9 +72,25 @@ void AEnemyCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPri
 
 void AEnemyCharacter::OnCompBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor && (OtherActor != this) && OtherComp)
+	if (OtherActor && (OtherActor != this) && OtherComp) //자기 자신과 충돌되었을 경우 배제
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Overlap Began with: %s  !#@#@$@$"), *OtherActor->GetName());
+		FName BoneName = SweepResult.MyBoneName;
+		if (!BoneName.IsEqual("sword_bottom")) return; //검에 해당되는 Bone 에 충돌되었을시에만 공격 처리
+
+		ACharacter* OtherCharacter = Cast<ACharacter>(OtherActor);
+		float DamageAmount = 50.0f;
+		AController* InstigatorController = GetController(); //AEnemyCharacter (자기자신) 의컨트롤러
+		AActor* DamageCauser = this;
+		TSubclassOf<UDamageType> DamageType = UDamageType::StaticClass(); //TSubclassOf 는 클래스 타입 자체를 저장한다.
+
+		if (OtherCharacter && InstigatorController)
+		{
+			UGameplayStatics::ApplyDamage(OtherActor, DamageAmount, InstigatorController, DamageCauser, DamageType);
+		}
+		else if (!OtherCharacter && !InstigatorController)
+		{
+			UE_LOG(LogTemp, Error, TEXT("AEnemyCharacter::OnCompBeginOverlap, OtherCharacter or InstigatorController is NULL"));
+		}
 	}
 }
 
