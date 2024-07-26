@@ -65,6 +65,10 @@ private:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = true))
 	class UHealthComponent* PlayerHealthComponent;
 
+	//HP 바 UI
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = true))
+	class UWidgetComponent* HealthBarComponent;
+
 	//위젯블루프린트 클래스의 객체 (인스턴스) 
 	UPROPERTY(Category = "UI", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	UUserWidget* MyPlayerScreenInstance;

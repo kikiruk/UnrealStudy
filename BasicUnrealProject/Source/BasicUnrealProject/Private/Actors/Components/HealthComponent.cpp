@@ -16,6 +16,7 @@ UHealthComponent::UHealthComponent() : MaxHealth(10000.f), CurrentHealth(MaxHeal
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
 	// ...
 }
 
@@ -46,6 +47,11 @@ void UHealthComponent::IncreaseHealth(float Amount)
 	}
 
 	OnHealthChanged.Broadcast(CurrentHealth);
+}
+
+float UHealthComponent::GetPercent()
+{
+	return CurrentHealth / MaxHealth;
 }
 
 void UHealthComponent::Die()

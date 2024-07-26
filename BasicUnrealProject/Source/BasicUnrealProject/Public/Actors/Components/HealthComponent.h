@@ -39,6 +39,9 @@ public: //사용자 정의 함수 및 변수
     // 체력 증가 함수
     void IncreaseHealth(float Amount);
 
+    // 체력바 입력용 퍼센테이지 함수
+    float GetPercent();
+
     // 체력 변화 델리게이트
     UPROPERTY(BlueprintAssignable, Category="Events")
     FOnHealthChanged OnHealthChanged;
