@@ -9,6 +9,7 @@
 #include "Actors/Components/HealthComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Actors/Widget/HealthBarUserWidget.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter() :
@@ -92,7 +93,7 @@ void APlayerCharacter::BeginPlay()
 
 		if (IsValid(MyPlayerScreenInstance))
 		{
-			//MyPlayerScreenInstance->AddToViewport(); // 형편없는 Aim 잠시동안 안보이게 설정
+			MyPlayerScreenInstance->AddToViewport(); // 형편없는 Aim 잠시동안 안보이게 설정
 		}
 	}
 
@@ -252,6 +253,17 @@ void APlayerCharacter::doChameraArmLengthSetup(float val)
 
 void APlayerCharacter::doLeftClick()
 {
+	FHitResult outHit;
+	FVector start = MyCamera->GetComponentLocation(); //트레이스 시작 위치
+	FVector end = start + (MyCamera->GetForwardVector() * 10000.f); // 트레이스 끝 위치
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		OUT outHit,
+		start,
+		end,
+		ECC_Pawn
+	);
+
 	if (bCanBeFireArrow)
 	{
 		bCanBeFireArrow = false;
@@ -259,7 +271,6 @@ void APlayerCharacter::doLeftClick()
 		//스켈레탈 메쉬의 arrow_anchor 라는 이름을 가진 소켓을 가져온다.
 		FTransform SocketTranceform = GetMesh()->GetSocketTransform(FName("arrow_anchor"));
 		FVector SocketLocation = SocketTranceform.GetLocation();
-		FRotator SocketRotation = SocketTranceform.GetRotation().Rotator();
 
 		/*FActorSpawnParameters 구조체는 Unreal Engine에서 액터를 스폰(생성)할 때 사용되는 매개변수 집합을 정의
 		* Owner 을 설정해줌으로써 화살이 누구에 의해 발사되었는지를 알 수 있습니다.
@@ -268,8 +279,10 @@ void APlayerCharacter::doLeftClick()
 		FActorSpawnParameters params;
 		params.Owner = this;
 
-		GetWorld()->SpawnActor<AActor>(ArrowBlueprint, SocketLocation, SocketRotation, params);
+		// StartLocation에서 EndLocation으로 향하는 회전 값 계산
+		FRotator ArrowRotation = UKismetMathLibrary::FindLookAtRotation(SocketLocation, (bHit) ? outHit.Location : end);
 
+		GetWorld()->SpawnActor<AActor>(ArrowBlueprint, SocketLocation, ArrowRotation, params);
 		// 이벤트 델리게이트 호출
 		OnArrowFired.Broadcast();
 	}

@@ -67,7 +67,7 @@ void AEnemyCharacter::BeginPlay()
 
 void AEnemyCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Hit@!!!!!!!@!@!@!"));
+	//UE_LOG(LogTemp, Warning, TEXT("Hit@!!!!!!!@!@!@!"));
 }
 
 void AEnemyCharacter::OnCompBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

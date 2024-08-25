@@ -24,7 +24,6 @@ UBTService_EnemyMain::UBTService_EnemyMain()
 // TickNode 함수: 서비스가 실행될 때마다 호출됩니다.
 void UBTService_EnemyMain::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
- 
     Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
     //UE_LOG(LogTemp, Log, TEXT("BT_Service DeltaSeconds: %f"), DeltaSeconds); // 디버그 로그에 DeltaSeconds를 출력합니다.
@@ -38,7 +37,6 @@ void UBTService_EnemyMain::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
         APawn* ControlledPawn = AICon->GetPawn(); // 현재 폰(Pawn)의 위치를 가져옵니다.
         if (ControlledPawn)
         {
-            
             UWorld* World = ControlledPawn->GetWorld(); // 월드(World) 객체를 가져옵니다.
             if (World)
             {
@@ -47,7 +45,7 @@ void UBTService_EnemyMain::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
 
                 TArray<FOverlapResult> OverlapResults; // 탐색 반경 내의 객체를 탐지합니다.
 
-                UKismetSystemLibrary::FlushPersistentDebugLines(World); // 모든 선 지우기 (선이 여러 개 그려지는 것을 방지)
+                //UKismetSystemLibrary::FlushPersistentDebugLines(World); // 모든 선 지우기 (선이 여러 개 그려지는 것을 방지)
                 
                 // 탐색할 오브젝트 타입을 설정합니다. (여기서는 Pawn 채널을 사용)
                 FCollisionObjectQueryParams ObjectQueryParams; 
@@ -63,7 +61,7 @@ void UBTService_EnemyMain::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
                 );
 
                 // 디버그용으로 탐지하는 범위를 시각적으로 표시합니다.
-                DrawDebugSphere(World, PawnLocation, SearchRadius, 12, FColor::Red, true, -1.0f);
+                //DrawDebugSphere(World, PawnLocation, SearchRadius, 12, FColor::Red, true, -1.0f);
 
                 // 블랙보드 키의 값을 초기화합니다. 초기화 된 상태로 유지될 경우 데코레이터에서 Is Not Set 으로 판단 됩니다 
                 BlackboardComp->ClearValue(TargetLocationKey.SelectedKeyName);
@@ -88,10 +86,10 @@ void UBTService_EnemyMain::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
                             BlackboardComp->SetValueAsFloat(TargetDistanceKey.SelectedKeyName, FVector::Dist(OverlappedActor->GetActorLocation(), PawnLocation));
 
                             // 디버그용으로 탐지하는 범위를 시각적으로 표시합니다. (감지가 된 경우 노란색으로 바꿉니다)
-                            DrawDebugSphere(World, PawnLocation, SearchRadius, 12, FColor::Yellow, true, -1.0f);
-
-                            // 디버그용으로 탐지된 객체를 시각적으로 표시합니다.
-                            DrawDebugSphere(World, OverlappedActor->GetActorLocation(), 50.0f, 12, FColor::Red, false, 1.0f);
+                            //DrawDebugSphere(World, PawnLocation, SearchRadius, 12, FColor::Yellow, true, -1.0f);
+                            //
+                            //// 디버그용으로 탐지된 객체를 시각적으로 표시합니다.
+                            //DrawDebugSphere(World, OverlappedActor->GetActorLocation(), 50.0f, 12, FColor::Red, false, 1.0f);
 
                             break; // 첫 번째 탐지된 객체를 사용합니다.
                         }
