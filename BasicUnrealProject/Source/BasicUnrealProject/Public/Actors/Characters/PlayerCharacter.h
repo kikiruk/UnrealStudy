@@ -61,14 +61,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	class USpringArmComponent* MyCameraSpringArm;
 
-	//Player 의 HP 와 죽음 등을 관리하는 컴포넌트
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = true))
-	class UHealthComponent* PlayerHealthComponent;
-
-	//HP 바 UI
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = true))
-	class UWidgetComponent* HealthBarComponent;
-
 	//위젯블루프린트 클래스의 객체 (인스턴스) 
 	UPROPERTY(Category = "UI", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	UUserWidget* MyPlayerScreenInstance;

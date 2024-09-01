@@ -7,6 +7,7 @@
 #include "Particles/ParticleSystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
+#include "GameFramework/Character.h"
 
 // Sets default values
 AArrow::AArrow()
@@ -83,25 +84,37 @@ void AArrow::BeginPlay()
 
 void AArrow::BoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!bHasTriggered && ArrowHitParticleSystem)
+	if (!bHasTriggered)
 	{
 		bHasTriggered = true;
-		UE_LOG(LogTemp, Log, TEXT("Particle"));
 
-		// 현재 월드에서 파티클 시스템을 특정 위치에 스폰
-		UGameplayStatics::SpawnEmitterAtLocation(
-			GetWorld(),              // 월드 컨텍스트
-			ArrowHitParticleSystem,          // 사용할 파티클 시스템
-			CollisionMesh->GetComponentLocation(),      // 파티클을 생성할 위치
-			CollisionMesh->GetComponentRotation(),      // 파티클의 회전
-			true                     // 파티클의 자동 파괴 여부
-		);
+		if(ArrowHitParticleSystem)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Particle"));
+
+			// 현재 월드에서 파티클 시스템을 특정 위치에 스폰
+			UGameplayStatics::SpawnEmitterAtLocation(
+				GetWorld(),              // 월드 컨텍스트
+				ArrowHitParticleSystem,          // 사용할 파티클 시스템
+				CollisionMesh->GetComponentLocation(),      // 파티클을 생성할 위치
+				CollisionMesh->GetComponentRotation(),      // 파티클의 회전
+				true                     // 파티클의 자동 파괴 여부
+			);
+		}
+	
+
+		ACharacter* OwnedCharacter = Cast<ACharacter>(Owner);
+
+		if (OwnedCharacter)
+		{
+			TSubclassOf<UDamageType> DamageType = UDamageType::StaticClass(); //TSubclassOf 는 클래스 타입 자체를 저장한다.
+			UGameplayStatics::ApplyDamage(OtherActor, 10000.f, OwnedCharacter->Controller, this, DamageType);
+		}
+
+		ProjectileMovementComponent->StopMovementImmediately();
+		ProjectileMovementComponent->ProjectileGravityScale = 0.f;
+		this->AttachToActor(OtherActor, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
 	}
-
-	ProjectileMovementComponent->StopMovementImmediately();
-	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
-	this->AttachToActor(OtherActor, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-
 }
 
 // Called every frame

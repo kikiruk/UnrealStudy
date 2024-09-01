@@ -37,4 +37,11 @@ protected:
 	void OnCompBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
+
+	virtual void OnCharacterDeth() override;
+
+protected:
+	// 타이머 설정을 위한 TimerHandle을 선언합니다. 타이머가 실행되는 동안 다른 함수에서 타이머를 취소하거나 확인해야 할 수 있으므로 멤버변수로 합니다.
+	FTimerHandle TimerHandle_Dissapear;
+
 };

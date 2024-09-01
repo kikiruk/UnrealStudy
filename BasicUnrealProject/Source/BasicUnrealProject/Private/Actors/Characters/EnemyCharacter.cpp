@@ -5,6 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter() : AttackMontage(nullptr)
@@ -67,7 +68,26 @@ void AEnemyCharacter::BeginPlay()
 
 void AEnemyCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Hit@!!!!!!!@!@!@!"));
+	return;
+}
+
+void AEnemyCharacter::OnCharacterDeth()
+{
+	Super::OnCharacterDeth();
+
+	GetCharacterMovement()->DisableMovement();
+	SetActorEnableCollision(false); // 콜리전 비활성화
+
+	GetWorldTimerManager().SetTimer( // 타이머 설정, 10초 뒤 실행
+		TimerHandle_Dissapear,		// 타이머 설정을 위한 맴버변수 FTimerHandle
+		FTimerDelegate::CreateLambda([this]() { // 람다식
+			GetMesh()->SetVisibility(false);	// 보이지 않게 설정
+			SetActorHiddenInGame(true);			// 
+			SetLifeSpan(1.0f); // 1초 후에 완전히 제거
+		}),
+		10.0f,
+		false
+	);
 }
 
 void AEnemyCharacter::OnCompBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

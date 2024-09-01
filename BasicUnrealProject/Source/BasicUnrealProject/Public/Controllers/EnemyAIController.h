@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "BehaviorTree/BehaviorTree.h" // 이 헤더는 포함되지 않아도 작동되나, 가독성과 유지보수성을 위해서 명시적으로 적습니다.
-#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/BehaviorTreeTypes.h" // FBlackboardKeySelector 를 사용하기 위한 헤더 포함 (블랙보드 키 이용)
 #include "EnemyAIController.generated.h"
 
 /**
@@ -26,8 +25,15 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, Category = "AI")
-	UBehaviorTree* BehaviorTreeAsset;
+	class UBehaviorTree* BehaviorTreeAsset;
 
 	UPROPERTY(Transient)
-	UBlackboardComponent* BlackboardComponent;
+	class UBlackboardComponent* BlackboardComponent;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "BlackboardKey")
+	FBlackboardKeySelector IsDieKey;
+
+	UFUNCTION()
+	void OwnerCharacerDeath();
 };

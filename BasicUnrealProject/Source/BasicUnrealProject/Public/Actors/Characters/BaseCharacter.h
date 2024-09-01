@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
+// »ç¸Á µ¨¸®°ÔÀÌÆ®
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBaseCharacterOnDeath);
+
 UCLASS()
 class BASICUNREALPROJECT_API ABaseCharacter : public ACharacter
 {
@@ -26,4 +29,24 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+protected:
+	//Player ÀÇ HP ¿Í Á×À½ µîÀ» °ü¸®ÇÏ´Â ÄÄÆ÷³ÍÆ®
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = true))
+	class UHealthComponent* PlayerHealthComponent;
+
+	//HP ¹Ù UI
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = true))
+	class UWidgetComponent* HealthBarComponent;
+
+	UFUNCTION()
+	virtual void OnCharacterDeth();
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character State")
+	bool isDie;
+
+	// »ç¸Á µ¨¸®°ÔÀÌÆ®
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FBaseCharacterOnDeath BaseCharacterOnDeath;
 };

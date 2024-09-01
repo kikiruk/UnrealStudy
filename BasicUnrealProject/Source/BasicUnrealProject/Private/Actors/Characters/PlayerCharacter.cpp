@@ -6,9 +6,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/CharacterMovementComponent.h" // 이거 꼭 넣어야하는지 확인
-#include "Actors/Components/HealthComponent.h"
-#include "Components/WidgetComponent.h"
-#include "Actors/Widget/HealthBarUserWidget.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -21,16 +18,10 @@ APlayerCharacter::APlayerCharacter() :
 
 	MyCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("MySpringArm"));
 	MyCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MyCamera"));
-	PlayerHealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
-	HealthBarComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBarComponent"));
-
-	//2D 스크린에 HP 위젯 부착
-	HealthBarComponent->SetWidgetSpace(EWidgetSpace::Screen);
 
 	//Capsule <- CameraSpringArm <- Camera 이렇게 붙임
 	MyCameraSpringArm->SetupAttachment(GetCapsuleComponent());
 	MyCamera->SetupAttachment(MyCameraSpringArm);
-	HealthBarComponent->SetupAttachment(GetCapsuleComponent());
 
 	//카메라 팔 길이 400 으로 설정 하고 회전 (-35.f, 0.f, 0.f)
 	MyCameraSpringArm->TargetArmLength = 400.f;
@@ -39,20 +30,11 @@ APlayerCharacter::APlayerCharacter() :
 	//Aim이 화면에 나오는 것을 캐릭터 오른쪽 어깨 위로 올리기위함이다. 학원수업내용을 따라기기위해 했지만 좋은 방법은 확실히 아니다.
 	MyCameraSpringArm->SocketOffset = FVector(0.f, 120.f, 75.f);
 	MyCameraSpringArm->SetRelativeRotation(FRotator(-35.f, 0.f, 0.f));
-	HealthBarComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 116.0f));
-
 
 	//[회전 설정]
 	bUseControllerRotationYaw = false; // 캐릭터가 컨트롤러 회전을 따라 자동으로 회전하지 않게 설정
 	MyCameraSpringArm->bUsePawnControlRotation = true; //SpringArm 의 회전을 Controller 의 회전값에 따라 움직이도록 설정
 	MyCamera->bUsePawnControlRotation = false; // 카메라가 자체적으로 회전하도록 설정 (캐릭터의 회전을 따르지 않음)
-
-	ConstructorHelpers::FClassFinder<UHealthBarUserWidget> healthBarConstructer(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyBlueprint/WBP_HealthBarUserWidget.WBP_HealthBarUserWidget_C'"));
-
-	if (healthBarConstructer.Succeeded())
-	{
-		HealthBarComponent->SetWidgetClass(healthBarConstructer.Class);
-	}
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> SkeletalMesh(
 		TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonSparrow/Characters/Heroes/Sparrow/Meshes/Sparrow.Sparrow'"));
@@ -211,13 +193,6 @@ float APlayerCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent
 {
 	float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
-	PlayerHealthComponent->DecreaseHealth(ActualDamage);
-	UHealthBarUserWidget* PlayerHealthBar = Cast<UHealthBarUserWidget>(HealthBarComponent->GetWidget());
-
-	if (PlayerHealthBar)
-	{
-		PlayerHealthBar->SetPercent(PlayerHealthComponent->GetPercent());
-	}
 
 	return ActualDamage;
 }
@@ -279,7 +254,7 @@ void APlayerCharacter::doLeftClick()
 		FActorSpawnParameters params;
 		params.Owner = this;
 
-		// StartLocation에서 EndLocation으로 향하는 회전 값 계산
+		// StartLocation에서 SocketLocation으로 향하는 회전 값 계산
 		FRotator ArrowRotation = UKismetMathLibrary::FindLookAtRotation(SocketLocation, (bHit) ? outHit.Location : end);
 
 		GetWorld()->SpawnActor<AActor>(ArrowBlueprint, SocketLocation, ArrowRotation, params);
