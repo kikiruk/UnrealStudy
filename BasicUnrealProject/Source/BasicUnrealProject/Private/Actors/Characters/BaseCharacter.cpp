@@ -15,13 +15,13 @@ ABaseCharacter::ABaseCharacter() : isDie(false)
 
 	PlayerHealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	HealthBarComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBarComponent"));
-
+	
 	ConstructorHelpers::FClassFinder<UHealthBarUserWidget> healthBarConstructer(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyBlueprint/WBP_HealthBarUserWidget.WBP_HealthBarUserWidget_C'"));
 	if (healthBarConstructer.Succeeded())
 	{
 		HealthBarComponent->SetWidgetClass(healthBarConstructer.Class);
 	}
-
+	
 	HealthBarComponent->SetupAttachment(GetCapsuleComponent());
 	HealthBarComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 116.0f));
 
@@ -34,12 +34,19 @@ void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayerHealthComponent->OnDeath.AddDynamic(this, &ABaseCharacter::OnCharacterDeth);
-
-	UHealthBarUserWidget* PlayerHealthBar = Cast<UHealthBarUserWidget>(HealthBarComponent->GetWidget());
-	if (PlayerHealthBar)
+	if (HealthBarComponent && PlayerHealthComponent)
 	{
-		PlayerHealthBar->SetPercent(1.0f);// 캐릭터의 체력을 풀피로 표시되게 함
+		PlayerHealthComponent->OnDeath.AddDynamic(this, &ABaseCharacter::OnCharacterDeth);
+	
+		UHealthBarUserWidget* PlayerHealthBar = Cast<UHealthBarUserWidget>(HealthBarComponent->GetWidget());
+		if (PlayerHealthBar)
+		{
+			PlayerHealthBar->SetPercent(1.0f);// 캐릭터의 체력을 풀피로 표시되게 함
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BaseCharacter : problem with HealthBarComponent or PlayerHealthComponent"));
 	}
 }
 
@@ -61,12 +68,19 @@ float ABaseCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 {
 	float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
-	PlayerHealthComponent->DecreaseHealth(ActualDamage);
-	UHealthBarUserWidget* PlayerHealthBar = Cast<UHealthBarUserWidget>(HealthBarComponent->GetWidget());
-
-	if (PlayerHealthBar)
+	if (PlayerHealthComponent && HealthBarComponent)
 	{
-		PlayerHealthBar->SetPercent(PlayerHealthComponent->GetPercent());
+		PlayerHealthComponent->DecreaseHealth(ActualDamage);
+		UHealthBarUserWidget* PlayerHealthBar = Cast<UHealthBarUserWidget>(HealthBarComponent->GetWidget());
+
+		if (PlayerHealthBar)
+		{
+			PlayerHealthBar->SetPercent(PlayerHealthComponent->GetPercent());
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BaseCharacter : problem with HealthBarComponent or PlayerHealthComponent"));
 	}
 
 	return ActualDamage;

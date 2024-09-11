@@ -11,7 +11,7 @@ public class BasicUnrealProject : ModuleRules
         //기본 프로젝트에서 추가된것 : "UMG"
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "NavigationSystem", "AIModule", "GameplayTasks" });
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+        PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 
         PublicIncludePaths.AddRange(new string[] { "BasicUnrealProject/Public" });
         PrivateIncludePaths.AddRange(new string[] { "BasicUnrealProject/Private" });
