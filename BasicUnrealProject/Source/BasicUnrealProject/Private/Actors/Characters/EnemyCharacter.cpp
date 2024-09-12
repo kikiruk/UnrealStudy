@@ -52,18 +52,54 @@ void AEnemyCharacter::Attack()
 			AnimIns->Montage_Play(AttackMontage);
 		}
 	}
+
+	// Overlap 결과를 저장할 배열
+	TArray<FOverlapResult> overlapResults;
+	FVector capsuleLocation = GetActorLocation() + GetActorForwardVector() * 60;// 캡슐의 위치
+	float capsuleRadius = 50.f;                    // 캡슐의 반지름
+	float capsuleHalfHeight = 120.f;                // 캡슐의 높이 (절반값)
+	FRotator capsuleRotator = GetActorForwardVector().Rotation();     // 캡슐의 회전
+	capsuleRotator += FRotator(90.0f, 0.0f, 0.0f);
+	FQuat capsuleRotation = capsuleRotator.Quaternion();
+	
+	// 충돌 영역을 캡슐로 설정
+	FCollisionShape CollisionShape = FCollisionShape::MakeCapsule(capsuleRadius, capsuleHalfHeight);
+
+	// OverlapMultiByChannel 함수 호출
+	bool bHasOverlapped = GetWorld()->OverlapMultiByChannel(
+		overlapResults,               // Overlap 결과가 저장될 배열
+		capsuleLocation,              // 오버랩의 중심 위치
+		capsuleRotation,              // 오버랩의 회전
+		ECollisionChannel::ECC_Pawn,  // 충돌 채널 설정
+		CollisionShape                // 충돌 영역 (구체)
+	);
+
+	// 디버그 캡슐 그리기
+	UKismetSystemLibrary::DrawDebugCapsule(GetWorld(), capsuleLocation, capsuleHalfHeight, capsuleRadius, capsuleRotator, FLinearColor::Green, 5.0f, 2.0f);
+
+	if (bHasOverlapped) // 충돌이 검출되었다면
+	{
+		for (const FOverlapResult& result : overlapResults)
+		{
+			AActor* resultActor = result.GetActor();
+			if (!resultActor || resultActor == this) continue; //resultActor 가 유효하지 않거나, 자기 자신일 경우 생략
+
+			ABaseCharacter* resultBaseCharacter = Cast<ABaseCharacter>(resultActor);
+			AController* thisController = GetController();
+
+			// resultBaseCharacter와 thisController가 모두 유효한지 확인 후 ApplyDamage 호출
+			if (resultBaseCharacter && thisController)
+			{
+				UGameplayStatics::ApplyDamage(resultBaseCharacter, 50.0f, thisController, this, UDamageType::StaticClass());
+			}
+		}
+	}
 }
 
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	USkeletalMeshComponent* MeshComp = GetMesh();
-	// Generate Overlap Events를 활성화
-	MeshComp->SetGenerateOverlapEvents(true);
-	// OnComponentBeginOverlap 이벤트 바인딩
-	MeshComp->OnComponentBeginOverlap.AddDynamic(this, &AEnemyCharacter::OnCompBeginOverlap);
 }
 
 void AEnemyCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
@@ -84,34 +120,10 @@ void AEnemyCharacter::OnCharacterDeth()
 			GetMesh()->SetVisibility(false);	// 보이지 않게 설정
 			SetActorHiddenInGame(true);			// 
 			SetLifeSpan(1.0f); // 1초 후에 완전히 제거
-		}),
+			}),
 		10.0f,
 		false
 	);
-}
-
-void AEnemyCharacter::OnCompBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (OtherActor && (OtherActor != this) && OtherComp) //자기 자신과 충돌되었을 경우 배제
-	{
-		FName BoneName = SweepResult.MyBoneName;
-		if (!BoneName.IsEqual("sword_bottom")) return; //검에 해당되는 Bone 에 충돌되었을시에만 공격 처리
-
-		ACharacter* OtherCharacter = Cast<ACharacter>(OtherActor);
-		float DamageAmount = 50.0f;
-		AController* InstigatorController = GetController(); //AEnemyCharacter (자기자신) 의컨트롤러
-		AActor* DamageCauser = this;
-		TSubclassOf<UDamageType> DamageType = UDamageType::StaticClass(); //TSubclassOf 는 클래스 타입 자체를 저장한다.
-
-		if (OtherCharacter && InstigatorController)
-		{
-			UGameplayStatics::ApplyDamage(OtherActor, DamageAmount, InstigatorController, DamageCauser, DamageType);
-		}
-		else if (!OtherCharacter && !InstigatorController)
-		{
-			UE_LOG(LogTemp, Error, TEXT("AEnemyCharacter::OnCompBeginOverlap, OtherCharacter or InstigatorController is NULL"));
-		}
-	}
 }
 
 // Called every frame

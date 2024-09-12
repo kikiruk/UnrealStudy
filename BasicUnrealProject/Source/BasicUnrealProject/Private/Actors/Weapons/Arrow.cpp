@@ -108,7 +108,7 @@ void AArrow::BoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		if (OwnedCharacter)
 		{
 			TSubclassOf<UDamageType> DamageType = UDamageType::StaticClass(); //TSubclassOf 는 클래스 타입 자체를 저장한다.
-			UGameplayStatics::ApplyDamage(OtherActor, 10000.f, OwnedCharacter->Controller, this, DamageType);
+			UGameplayStatics::ApplyDamage(OtherActor, 100.f, OwnedCharacter->Controller, this, DamageType);
 		}
 
 		ProjectileMovementComponent->StopMovementImmediately();
