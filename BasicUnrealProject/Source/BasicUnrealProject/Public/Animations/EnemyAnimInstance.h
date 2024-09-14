@@ -21,4 +21,24 @@ public:
 	virtual void NativeBeginPlay() override;
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+	UFUNCTION()
+	void AnimNotify_SaveAttack();
+
+	UFUNCTION()
+	void AnimNotify_ResetCombo();
+
+	UFUNCTION()
+	virtual bool TryPlayAttackMontage();
+protected:
+	UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	class UAnimMontage* AttackMontage_one;
+		UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	class UAnimMontage* AttackMontage_two;
+		UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	class UAnimMontage* AttackMontage_three;
+
+protected:
+	bool SaveAttack; // 다음 공격 콤보가 준비된 상태이면 true
+	int ComboNum; // 몇번째 콤보인지 표시
 };

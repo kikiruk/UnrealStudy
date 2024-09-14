@@ -6,9 +6,10 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Animations/EnemyAnimInstance.h"
 
 // Sets default values
-AEnemyCharacter::AEnemyCharacter() : AttackMontage(nullptr)
+AEnemyCharacter::AEnemyCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -32,27 +33,32 @@ AEnemyCharacter::AEnemyCharacter() : AttackMontage(nullptr)
 	{
 		GetMesh()->SetAnimClass(animClass.Class);
 	}
-
-	ConstructorHelpers::FObjectFinder<UAnimMontage> attackMontageConstructor(TEXT("/Script/Engine.AnimMontage'/Game/MyBlueprint/Animation/Enemy/AM_Attack.AM_Attack'"));
-
-	if (attackMontageConstructor.Succeeded())
-	{
-		AttackMontage = attackMontageConstructor.Object;
-	}
 }
 
 void AEnemyCharacter::Attack()
 {
-	UAnimInstance* AnimIns = GetMesh()->GetAnimInstance();
-
-	if (AnimIns)
-	{
-		if (AttackMontage && !AnimIns->Montage_IsPlaying(AttackMontage))
-		{
-			AnimIns->Montage_Play(AttackMontage);
-		}
+	USkeletalMeshComponent* enemyMesh = GetMesh();
+	if (!enemyMesh) {
+		UE_LOG(LogTemp, Warning, TEXT("[AEnemyCharacter::Attack] GetMesh() failed."));
+		return;
 	}
 
+	UAnimInstance* AnimIns = enemyMesh->GetAnimInstance();
+	if (!AnimIns) {
+		UE_LOG(LogTemp, Warning, TEXT("[AEnemyCharacter::Attack] GetAnimInstance() failed."));
+		return;
+	}
+
+	UEnemyAnimInstance* EnemyAnim = Cast<UEnemyAnimInstance>(AnimIns);
+	if (!EnemyAnim) {
+		UE_LOG(LogTemp, Warning, TEXT("[AEnemyCharacter::Attack] Cast<UEnemyAnimInstance>(AnimIns) failed."));
+		return;
+	}
+
+	bool attackMontageSucceded = EnemyAnim->TryPlayAttackMontage();
+	if (attackMontageSucceded == false) return;
+
+	// Attack 충돌 처리 
 	// Overlap 결과를 저장할 배열
 	TArray<FOverlapResult> overlapResults;
 	FVector capsuleLocation = GetActorLocation() + GetActorForwardVector() * 60;// 캡슐의 위치
@@ -61,7 +67,7 @@ void AEnemyCharacter::Attack()
 	FRotator capsuleRotator = GetActorForwardVector().Rotation();     // 캡슐의 회전
 	capsuleRotator += FRotator(90.0f, 0.0f, 0.0f);
 	FQuat capsuleRotation = capsuleRotator.Quaternion();
-	
+
 	// 충돌 영역을 캡슐로 설정
 	FCollisionShape CollisionShape = FCollisionShape::MakeCapsule(capsuleRadius, capsuleHalfHeight);
 
@@ -71,7 +77,7 @@ void AEnemyCharacter::Attack()
 		capsuleLocation,              // 오버랩의 중심 위치
 		capsuleRotation,              // 오버랩의 회전
 		ECollisionChannel::ECC_Pawn,  // 충돌 채널 설정
-		CollisionShape                // 충돌 영역 (구체)
+		CollisionShape                // 충돌 영역 (구체)	
 	);
 
 	// 디버그 캡슐 그리기
