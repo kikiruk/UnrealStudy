@@ -30,13 +30,22 @@ public:
 
 	UFUNCTION()
 	virtual bool TryPlayAttackMontage();
+
+	UFUNCTION()
+	void OnLevelStartMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
 protected:
 	UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	class UAnimMontage* AttackMontage_one;
-		UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+
+	UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	class UAnimMontage* AttackMontage_two;
-		UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+
+	UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	class UAnimMontage* AttackMontage_three;
+
+	UPROPERTY(Category = "Animation", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	class UAnimMontage* LeveLStartMontage;
 
 protected:
 	bool SaveAttack; // 다음 공격 콤보가 준비된 상태이면 true

@@ -3,7 +3,6 @@
 
 #include "Controllers/EnemyAIController.h"
 #include "GameFramework/Character.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "NavigationSystem.h"
 #include "Actors/Characters/BaseCharacter.h"
 #include "BehaviorTree/BehaviorTree.h"
@@ -36,6 +35,9 @@ void AEnemyAIController::BeginPlay()
             IsDieKey.SelectedKeyName = "IsDie";
             IsDieKey.AddBoolFilter(this, GET_MEMBER_NAME_CHECKED(AEnemyAIController, IsDieKey));// 블랙보드 키를 초기화하고 필터를 추가합니다.
             BlackboardComponent->ClearValue(IsDieKey.SelectedKeyName); //블랙보드의 isDie 라는 키 NotSet 으로 초기화
+            IsLevelStartMontageEnded.SelectedKeyName = "IsStartMontageEnd";
+            IsLevelStartMontageEnded.AddBoolFilter(this, GET_MEMBER_NAME_CHECKED(AEnemyAIController, IsLevelStartMontageEnded));// 블랙보드 키를 초기화하고 필터를 추가합니다.
+            BlackboardComponent->ClearValue(IsLevelStartMontageEnded.SelectedKeyName); //블랙보드의 IsStartMontageEnd 라는 키 NotSet 으로 초기화
 
             bool bIsDieValue = BlackboardComponent->GetValueAsBool(IsDieKey.SelectedKeyName);
             
@@ -57,6 +59,17 @@ void AEnemyAIController::BeginPlay()
 void AEnemyAIController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds); // 반드시 호출해야 합니다
+}
+
+void AEnemyAIController::SetMontageEndedKeyTrue()
+{
+    UE_LOG(LogTemp, Warning, TEXT("AEnemyAIController::SetMontageEndedKeyTrue"));
+
+    if (BehaviorTreeAsset)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("AEnemyAIController::SetMontageEndedKeyTrue  if (BehaviorTreeAsset)"));
+        BlackboardComponent->SetValueAsBool(IsLevelStartMontageEnded.SelectedKeyName, true);
+    }
 }
 
 void AEnemyAIController::OwnerCharacerDeath()

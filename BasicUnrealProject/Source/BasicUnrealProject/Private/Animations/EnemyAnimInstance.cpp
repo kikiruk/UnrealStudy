@@ -2,9 +2,13 @@
 
 
 #include "Animations/EnemyAnimInstance.h"
+#include "Actors/Characters/EnemyCharacter.h"
+#include "Controllers/EnemyAIController.h"
+#include "GameFramework/PawnMovementComponent.h"
 
 UEnemyAnimInstance::UEnemyAnimInstance()
 {
+	/********************************************캐릭터 기본 공격 애니메이션 **************************************************/
 	ConstructorHelpers::FObjectFinder<UAnimMontage> attackMontage_oneConstructor(
 		TEXT("/Script/Engine.AnimMontage'/Game/ParagonGreystone/Characters/Heroes/Greystone/Animations/Attack_PrimaryA_Montage.Attack_PrimaryA_Montage'"));
 	ConstructorHelpers::FObjectFinder<UAnimMontage> attackMontage_twoConstructor(
@@ -26,11 +30,26 @@ UEnemyAnimInstance::UEnemyAnimInstance()
 
 	SaveAttack = false;	  // 다음 공격 콤보가 준비된 상태이면 true
 	ComboNum = 1;		// 몇번째 콤보인지 표시
+
+	/************************************************게임 시작 애니메이션***************************************************/
+	ConstructorHelpers::FObjectFinder<UAnimMontage> LeveLStartMontageConstructor(
+		TEXT("/Script/Engine.AnimMontage'/Game/ParagonGreystone/Characters/Heroes/Greystone/Animations/LevelStart_Montage.LevelStart_Montage'"));
+
+	if (attackMontage_threeConstructor.Succeeded()) {
+		LeveLStartMontage = LeveLStartMontageConstructor.Object;
+	}
 }
 
 void UEnemyAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
+
+	Montage_Play(LeveLStartMontage);
+
+	// 델리게이트 설정
+	FOnMontageEnded MontageEndedDelegate;
+	MontageEndedDelegate.BindUObject(this, &UEnemyAnimInstance::OnLevelStartMontageEnded); // OnMontageEnded는 콜백 함수
+	Montage_SetEndDelegate(MontageEndedDelegate, LeveLStartMontage);
 }
 
 void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -79,6 +98,28 @@ bool UEnemyAnimInstance::TryPlayAttackMontage()
 		ComboNum++;
 		return true;
 	}
+
 	else return false;
 }
+
+void UEnemyAnimInstance::OnLevelStartMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	UE_LOG(LogTemp, Warning, TEXT("UEnemyAnimInstance::OnLevelStartMontageEnded"));
+
+	APawn* owendPawn = TryGetPawnOwner();
+	if (!owendPawn) return;
+
+	AEnemyCharacter* ownedEnemyCharacter = Cast<AEnemyCharacter>(owendPawn);
+	if (!ownedEnemyCharacter) return;
+
+	AController* controller = ownedEnemyCharacter->GetController();
+	if (!controller) return;
+
+	AEnemyAIController* enemyController = Cast<AEnemyAIController>(controller);
+	if (!enemyController) return;
+
+	enemyController->SetMontageEndedKeyTrue();
+}
+
+
 

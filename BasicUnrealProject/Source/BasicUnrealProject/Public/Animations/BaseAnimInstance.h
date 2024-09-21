@@ -14,4 +14,8 @@ class BASICUNREALPROJECT_API UBaseAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 	
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	bool GetIsIdle();
 };

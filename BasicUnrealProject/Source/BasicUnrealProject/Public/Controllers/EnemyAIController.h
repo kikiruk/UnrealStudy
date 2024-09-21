@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "BehaviorTree/BehaviorTreeTypes.h" // FBlackboardKeySelector 를 사용하기 위한 헤더 포함 (블랙보드 키 이용)
+#include "BehaviorTree/BehaviorTreeTypes.h" // FBlackboardKeySelector 을 전방 선언시 컴파일 에러 나서 헤더 포함함.
 #include "EnemyAIController.generated.h"
 
 /**
@@ -17,11 +17,13 @@ class BASICUNREALPROJECT_API AEnemyAIController : public AAIController
 public:
 	AEnemyAIController();
 
-
 public:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float deltaSecond) override;
+
+public:
+	void SetMontageEndedKeyTrue();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "AI")
@@ -33,6 +35,9 @@ private:
 private:
 	UPROPERTY(EditAnywhere, Category = "BlackboardKey")
 	FBlackboardKeySelector IsDieKey;
+
+	UPROPERTY(EditAnywhere, Category = "BlackboardKey")
+	FBlackboardKeySelector IsLevelStartMontageEnded;
 
 	UFUNCTION()
 	void OwnerCharacerDeath();
