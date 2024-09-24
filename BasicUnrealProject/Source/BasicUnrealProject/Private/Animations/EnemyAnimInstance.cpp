@@ -28,9 +28,6 @@ UEnemyAnimInstance::UEnemyAnimInstance()
 		AttackMontage_three = attackMontage_threeConstructor.Object;
 	}
 
-	SaveAttack = false;	  // 다음 공격 콤보가 준비된 상태이면 true
-	ComboNum = 1;		// 몇번째 콤보인지 표시
-
 	/************************************************게임 시작 애니메이션***************************************************/
 	ConstructorHelpers::FObjectFinder<UAnimMontage> LeveLStartMontageConstructor(
 		TEXT("/Script/Engine.AnimMontage'/Game/ParagonGreystone/Characters/Heroes/Greystone/Animations/LevelStart_Montage.LevelStart_Montage'"));
@@ -44,7 +41,7 @@ void UEnemyAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
 
-	Montage_Play(LeveLStartMontage);
+	Montage_Play(LeveLStartMontage, 1.5f);
 
 	// 델리게이트 설정
 	FOnMontageEnded MontageEndedDelegate;
@@ -61,45 +58,12 @@ void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UEnemyAnimInstance::AnimNotify_SaveAttack()
 {
-	SaveAttack = true;
+	OnMontageNotifyReceived.Broadcast(FName("SaveAttack"));
 }
 
 void UEnemyAnimInstance::AnimNotify_ResetCombo()
 {
-	SaveAttack = false;
-	ComboNum = 1;
-}
-
-bool UEnemyAnimInstance::TryPlayAttackMontage()
-{
-	if (SaveAttack == true || ComboNum == 1)
-	{
-		SaveAttack = false;
-
-		UE_LOG(LogTemp, Error, TEXT("ComboNum : %d"), ComboNum);
-
-		if (!AttackMontage_one || !AttackMontage_two || !AttackMontage_three)
-		{
-			UE_LOG(LogTemp, Error, TEXT("Montage is not properly set!"));
-		}
-
-		if (ComboNum == 1) {
-			Montage_Play(AttackMontage_one);
-		}
-		else if (ComboNum == 2)
-		{
-			Montage_Play(AttackMontage_two);
-		}
-		else if (ComboNum == 3)
-		{
-			Montage_Play(AttackMontage_three);
-		}
-
-		ComboNum++;
-		return true;
-	}
-
-	else return false;
+	OnMontageNotifyReceived.Broadcast(FName("ResetCombo"));
 }
 
 void UEnemyAnimInstance::OnLevelStartMontageEnded(UAnimMontage* Montage, bool bInterrupted)
@@ -120,6 +84,25 @@ void UEnemyAnimInstance::OnLevelStartMontageEnded(UAnimMontage* Montage, bool bI
 
 	enemyController->SetMontageEndedKeyTrue();
 }
+
+void UEnemyAnimInstance::OnStatesChanged()
+{
+	Super::OnStatesChanged();
+
+	bool currentBIsIdle = OwendBaseCharacter->bIsIdle;
+	if (bIsIdle != currentBIsIdle)
+	{
+		bIsIdle = currentBIsIdle;
+		if (currentBIsIdle == false)
+		{
+			if (Montage_IsPlaying(AttackMontage_one)) Montage_Stop(0.2f, AttackMontage_one); 
+			else if (Montage_IsPlaying(AttackMontage_two)) Montage_Stop(0.2f, AttackMontage_two);
+			else if (Montage_IsPlaying(AttackMontage_three)) Montage_Stop(0.2f, AttackMontage_three);
+
+		}
+	}
+}
+
 
 
 

@@ -30,7 +30,7 @@ void UHealthComponent::DecreaseHealth(float Amount)
 
 	OnHealthChanged.Broadcast(CurrentHealth);
 
-	UE_LOG(LogTemp, Log, TEXT("HP : %f"), CurrentHealth); //디버그용 제거가능 
+	//UE_LOG(LogTemp, Log, TEXT("HP : %f"), CurrentHealth); //디버그용 제거가능 
 
 	if (CurrentHealth <= 0.0f)
 	{
@@ -58,5 +58,4 @@ void UHealthComponent::Die()
 {
 	OnDeath.Broadcast();
 	// 추가 사망 처리 로직
-	UE_LOG(LogTemp, Warning, TEXT("Character Died"));
 }

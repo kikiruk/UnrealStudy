@@ -6,6 +6,7 @@
 #include "Actors/Components/HealthComponent.h"
 #include "Actors/Widget/HealthBarUserWidget.h"
 #include "Components/WidgetComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter() : isDie(false)
@@ -54,6 +55,15 @@ void ABaseCharacter::BeginPlay()
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	bool currentBIsIdle = bIsIdle;
+	bIsIdle = !(GetMovementComponent()->Velocity.Length() > 0.0f);
+
+	if (currentBIsIdle != bIsIdle)
+	{
+		OnStatesChanged.Broadcast();
+		OnCharacterStartMoving();
+	}
 
 }
 

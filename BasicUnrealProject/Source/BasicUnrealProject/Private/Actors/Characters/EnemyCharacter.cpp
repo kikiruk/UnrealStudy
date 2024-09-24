@@ -33,31 +33,34 @@ AEnemyCharacter::AEnemyCharacter()
 	{
 		GetMesh()->SetAnimClass(animClass.Class);
 	}
+
+	ComboNum = 1;
+	bSaveAttack = true;
 }
 
 void AEnemyCharacter::Attack()
 {
-	USkeletalMeshComponent* enemyMesh = GetMesh();
-	if (!enemyMesh) {
-		UE_LOG(LogTemp, Warning, TEXT("[AEnemyCharacter::Attack] GetMesh() failed."));
-		return;
+	if (bSaveAttack == true)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ComboNum : %d"), ComboNum);
+
+		bSaveAttack = false;
+		if (ComboNum == 1) {
+			EnemyAnim->Play_AttackMontage_ComboOne();
+		}
+		else if (ComboNum == 2)
+		{
+			EnemyAnim->Play_AttackMontage_ComboTwo();
+		}
+		else if (ComboNum == 3)
+		{
+			EnemyAnim->Play_AttackMontage_ComboThree();
+		}
+
+		ComboNum = ComboNum % 3 + 1;
 	}
 
-	UAnimInstance* AnimIns = enemyMesh->GetAnimInstance();
-	if (!AnimIns) {
-		UE_LOG(LogTemp, Warning, TEXT("[AEnemyCharacter::Attack] GetAnimInstance() failed."));
-		return;
-	}
-
-	UEnemyAnimInstance* EnemyAnim = Cast<UEnemyAnimInstance>(AnimIns);
-	if (!EnemyAnim) {
-		UE_LOG(LogTemp, Warning, TEXT("[AEnemyCharacter::Attack] Cast<UEnemyAnimInstance>(AnimIns) failed."));
-		return;
-	}
-
-	bool attackMontageSucceded = EnemyAnim->TryPlayAttackMontage();
-	if (attackMontageSucceded == false) return;
-
+	//if (attackMontageSucceded == false) return;
 	// Attack 충돌 처리 
 	// Overlap 결과를 저장할 배열
 	TArray<FOverlapResult> overlapResults;
@@ -102,10 +105,40 @@ void AEnemyCharacter::Attack()
 	}
 }
 
+void AEnemyCharacter::OnMontageNotifyReceived(FName NotifyName)
+{
+	if (NotifyName == "SaveAttack") {
+		bSaveAttack = true;
+	}
+	else if (NotifyName == "ResetCombo") {
+		//구현 하기
+	}
+}
+
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	EnemyMesh = GetMesh();
+	if (!EnemyMesh) {
+		UE_LOG(LogTemp, Warning, TEXT("[AEnemyCharacter::Attack] GetMesh() failed."));
+		return;
+	}
+
+	AnimIns = EnemyMesh->GetAnimInstance();	
+	if (!AnimIns) {
+		UE_LOG(LogTemp, Warning, TEXT("[AEnemyCharacter::Attack] GetAnimInstance() failed."));
+		return;
+	}
+
+	EnemyAnim = Cast<UEnemyAnimInstance>(AnimIns);
+	if (!EnemyAnim) {
+		UE_LOG(LogTemp, Warning, TEXT("[AEnemyCharacter::Attack] Cast<UEnemyAnimInstance>(AnimIns) failed."));
+		return;
+	}
+
+	EnemyAnim->OnMontageNotifyReceived.AddUObject(this, &AEnemyCharacter::OnMontageNotifyReceived);
 }
 
 void AEnemyCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
@@ -130,6 +163,12 @@ void AEnemyCharacter::OnCharacterDeth()
 		10.0f,
 		false
 	);
+}
+
+void AEnemyCharacter::OnCharacterStartMoving()
+{
+	bSaveAttack = true;
+	ComboNum = 1;
 }
 
 // Called every frame

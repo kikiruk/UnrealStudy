@@ -8,6 +8,7 @@
 
 // 사망 델리게이트
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBaseCharacterOnDeath);
+DECLARE_MULTICAST_DELEGATE(FOnStatesChanged);
 
 UCLASS()
 class BASICUNREALPROJECT_API ABaseCharacter : public ACharacter
@@ -41,12 +42,21 @@ protected:
 
 	UFUNCTION()
 	virtual void OnCharacterDeth();
+	virtual void OnCharacterStartMoving() { return; };
+
+	virtual void OnMontageNotifyReceived(FName NotifyName) { return; };
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character State")
 	bool isDie;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character State")
+	bool bIsIdle;
+
 	// 사망 델리게이트
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FBaseCharacterOnDeath BaseCharacterOnDeath;
+
+	//상태 변수 변경 시 브로드캐스트
+	FOnStatesChanged OnStatesChanged;
 };

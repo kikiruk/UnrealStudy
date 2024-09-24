@@ -2,14 +2,30 @@
 
 
 #include "Animations/BaseAnimInstance.h"
-#include "GameFramework/Pawn.h"
-#include "GameFramework/CharacterMovementComponent.h"
+#include "Actors/Characters/BaseCharacter.h"
 
-bool UBaseAnimInstance::GetIsIdle()
+void UBaseAnimInstance::NativeBeginPlay()
 {
-	APawn* owendPawn = TryGetPawnOwner();
-	if (!owendPawn) return true;
+	Super::NativeBeginPlay();
 
-	double velocity = owendPawn->GetMovementComponent()->Velocity.Length();
-	return !(velocity > 0.0f);
+	APawn* owendPawn = TryGetPawnOwner();
+	if (!owendPawn)
+	{
+		UE_LOG(LogTemp, Error, TEXT(" UBaseAnimInstance::NativeBeginPlay() : TryGetPawnOwner() is NULL"));
+		return;
+	}
+
+	OwendBaseCharacter = Cast<ABaseCharacter>(owendPawn);
+	if (!OwendBaseCharacter)
+	{
+		UE_LOG(LogTemp, Error, TEXT(" UBaseAnimInstance::NativeBeginPlay() : Cast<ABaseCharacter>(owendPawn) is NULL"));
+		return;
+	}
+
+	OwendBaseCharacter->OnStatesChanged.AddUObject(this, &UBaseAnimInstance::OnStatesChanged);
+}
+
+void UBaseAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
+{
+	Super::NativeUpdateAnimation(DeltaSeconds);
 }
