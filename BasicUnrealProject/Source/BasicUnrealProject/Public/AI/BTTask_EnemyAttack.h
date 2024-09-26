@@ -16,4 +16,5 @@ class BASICUNREALPROJECT_API UBTTask_EnemyAttack : public UBTTaskNode
 public:
 	UBTTask_EnemyAttack();
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+	//virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };

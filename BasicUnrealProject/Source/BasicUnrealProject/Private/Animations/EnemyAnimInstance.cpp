@@ -66,6 +66,11 @@ void UEnemyAnimInstance::AnimNotify_ResetCombo()
 	OnMontageNotifyReceived.Broadcast(FName("ResetCombo"));
 }
 
+void UEnemyAnimInstance::AnimNotify_ApplyDamage()
+{
+	OwendBaseCharacter->ApplyDamage();
+}
+
 void UEnemyAnimInstance::OnLevelStartMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	UE_LOG(LogTemp, Warning, TEXT("UEnemyAnimInstance::OnLevelStartMontageEnded"));

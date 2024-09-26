@@ -31,6 +31,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	/********************사용자 정의 함수*********************/
+	virtual void ApplyDamage() { return; };
 protected:
 	//Player 의 HP 와 죽음 등을 관리하는 컴포넌트
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = true))
@@ -40,6 +43,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = true))
 	class UWidgetComponent* HealthBarComponent;
 
+	/********************사용자 정의 함수*********************/
 	UFUNCTION()
 	virtual void OnCharacterDeth();
 	virtual void OnCharacterStartMoving() { return; };

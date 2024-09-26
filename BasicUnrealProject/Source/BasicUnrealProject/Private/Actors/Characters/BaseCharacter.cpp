@@ -62,7 +62,9 @@ void ABaseCharacter::Tick(float DeltaTime)
 	if (currentBIsIdle != bIsIdle)
 	{
 		OnStatesChanged.Broadcast();
-		OnCharacterStartMoving();
+		if (bIsIdle == false) {
+			OnCharacterStartMoving();
+		}
 	}
 
 }

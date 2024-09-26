@@ -32,6 +32,9 @@ public:
 	void AnimNotify_ResetCombo();
 
 	UFUNCTION()
+	void AnimNotify_ApplyDamage();
+
+	UFUNCTION()
 	void OnLevelStartMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 /*********************몽타주 실행***************************/

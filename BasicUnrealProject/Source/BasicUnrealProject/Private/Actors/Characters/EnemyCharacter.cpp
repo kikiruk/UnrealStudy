@@ -59,50 +59,6 @@ void AEnemyCharacter::Attack()
 
 		ComboNum = ComboNum % 3 + 1;
 	}
-
-	//if (attackMontageSucceded == false) return;
-	// Attack 충돌 처리 
-	// Overlap 결과를 저장할 배열
-	TArray<FOverlapResult> overlapResults;
-	FVector capsuleLocation = GetActorLocation() + GetActorForwardVector() * 60;// 캡슐의 위치
-	float capsuleRadius = 50.f;                    // 캡슐의 반지름
-	float capsuleHalfHeight = 120.f;                // 캡슐의 높이 (절반값)
-	FRotator capsuleRotator = GetActorForwardVector().Rotation();     // 캡슐의 회전
-	capsuleRotator += FRotator(90.0f, 0.0f, 0.0f);
-	FQuat capsuleRotation = capsuleRotator.Quaternion();
-
-	// 충돌 영역을 캡슐로 설정
-	FCollisionShape CollisionShape = FCollisionShape::MakeCapsule(capsuleRadius, capsuleHalfHeight);
-
-	// OverlapMultiByChannel 함수 호출
-	bool bHasOverlapped = GetWorld()->OverlapMultiByChannel(
-		overlapResults,               // Overlap 결과가 저장될 배열
-		capsuleLocation,              // 오버랩의 중심 위치
-		capsuleRotation,              // 오버랩의 회전
-		ECollisionChannel::ECC_Pawn,  // 충돌 채널 설정
-		CollisionShape                // 충돌 영역 (구체)	
-	);
-
-	// 디버그 캡슐 그리기
-	UKismetSystemLibrary::DrawDebugCapsule(GetWorld(), capsuleLocation, capsuleHalfHeight, capsuleRadius, capsuleRotator, FLinearColor::Green, 5.0f, 2.0f);
-
-	if (bHasOverlapped) // 충돌이 검출되었다면
-	{
-		for (const FOverlapResult& result : overlapResults)
-		{
-			AActor* resultActor = result.GetActor();
-			if (!resultActor || resultActor == this) continue; //resultActor 가 유효하지 않거나, 자기 자신일 경우 생략
-
-			ABaseCharacter* resultBaseCharacter = Cast<ABaseCharacter>(resultActor);
-			AController* thisController = GetController();
-
-			// resultBaseCharacter와 thisController가 모두 유효한지 확인 후 ApplyDamage 호출
-			if (resultBaseCharacter && thisController)
-			{
-				UGameplayStatics::ApplyDamage(resultBaseCharacter, 50.0f, thisController, this, UDamageType::StaticClass());
-			}
-		}
-	}
 }
 
 void AEnemyCharacter::OnMontageNotifyReceived(FName NotifyName)
@@ -169,6 +125,52 @@ void AEnemyCharacter::OnCharacterStartMoving()
 {
 	bSaveAttack = true;
 	ComboNum = 1;
+}
+
+void AEnemyCharacter::ApplyDamage()
+{
+	// Damage 충돌 처리 
+	// Overlap 결과를 저장할 배열
+	TArray<FOverlapResult> overlapResults;
+	FVector capsuleLocation = GetActorLocation() + GetActorForwardVector() * 60;// 캡슐의 위치
+	float capsuleRadius = 50.f;                    // 캡슐의 반지름
+	float capsuleHalfHeight = 120.f;                // 캡슐의 높이 (절반값)
+	FRotator capsuleRotator = GetActorForwardVector().Rotation();     // 캡슐의 회전
+	capsuleRotator += FRotator(90.0f, 0.0f, 0.0f);
+	FQuat capsuleRotation = capsuleRotator.Quaternion();
+
+	// 충돌 영역을 캡슐로 설정
+	FCollisionShape CollisionShape = FCollisionShape::MakeCapsule(capsuleRadius, capsuleHalfHeight);
+
+	// OverlapMultiByChannel 함수 호출
+	bool bHasOverlapped = GetWorld()->OverlapMultiByChannel(
+		overlapResults,               // Overlap 결과가 저장될 배열
+		capsuleLocation,              // 오버랩의 중심 위치
+		capsuleRotation,              // 오버랩의 회전
+		ECollisionChannel::ECC_Pawn,  // 충돌 채널 설정
+		CollisionShape                // 충돌 영역 (구체)	
+	);
+
+	// 디버그 캡슐 그리기
+	UKismetSystemLibrary::DrawDebugCapsule(GetWorld(), capsuleLocation, capsuleHalfHeight, capsuleRadius, capsuleRotator, FLinearColor::Green, 5.0f, 2.0f);
+
+	if (bHasOverlapped) // 충돌이 검출되었다면
+	{
+		for (const FOverlapResult& result : overlapResults)
+		{
+			AActor* resultActor = result.GetActor();
+			if (!resultActor || resultActor == this) continue; //resultActor 가 유효하지 않거나, 자기 자신일 경우 생략
+
+			ABaseCharacter* resultBaseCharacter = Cast<ABaseCharacter>(resultActor);
+			AController* thisController = GetController();
+
+			// resultBaseCharacter와 thisController가 모두 유효한지 확인 후 ApplyDamage 호출
+			if (resultBaseCharacter && thisController)
+			{
+				UGameplayStatics::ApplyDamage(resultBaseCharacter, 50.0f, thisController, this, UDamageType::StaticClass());
+			}
+		}
+	}
 }
 
 // Called every frame

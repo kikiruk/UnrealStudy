@@ -8,6 +8,9 @@
 
 UBTTask_EnemyAttack::UBTTask_EnemyAttack()
 {
+    // TickTask 함수가 호출되도록 설정
+    //bNotifyTick = true;
+
     NodeName = "Enemy Attack";
 }
 
@@ -23,5 +26,19 @@ EBTNodeResult::Type UBTTask_EnemyAttack::ExecuteTask(UBehaviorTreeComponent& Own
         enemyCharacter->Attack();
     }
 
-	return EBTNodeResult::Type();
+	return EBTNodeResult::Succeeded;
 }
+
+//void UBTTask_EnemyAttack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+//{
+//    // AIController와 Pawn 가져오기
+//    AAIController* AIController = OwnerComp.GetAIOwner();
+//    APawn* ControlledPawn = AIController ? AIController->GetPawn() : nullptr;
+//    AEnemyCharacter* enemyCharacter = Cast<AEnemyCharacter>(ControlledPawn);
+//
+//    //if (enemyCharacter)
+//    //{
+//    //
+//    //}
+//}
+
